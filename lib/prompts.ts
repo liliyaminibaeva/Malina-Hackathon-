@@ -9,5 +9,5 @@ export function getPatternPrompt(
   styleConfig: unknown,
   yarnConfig: unknown
 ): string {
-  return `Generate a knitting pattern for a ${itemType} using the following config: ${JSON.stringify(styleConfig)} and yarn: ${JSON.stringify(yarnConfig)}`;
+  return `Generate a knitting pattern for a ${itemType} using the following config: ${JSON.stringify(styleConfig ?? null)} and yarn: ${JSON.stringify(yarnConfig ?? null)}`;
 }

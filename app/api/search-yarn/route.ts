@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ravelryFetch, RavelryYarn } from "@/lib/ravelry";
+import { ravelryFetch, RavelryYarn, RavelryError } from "@/lib/ravelry";
 
 interface RavelrySearchResponse {
   yarns: RavelryYarn[];
@@ -33,15 +33,15 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ yarns });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    if (message.includes("401")) {
+    if (error instanceof RavelryError && error.status === 401) {
       return NextResponse.json(
-        { error: "Invalid Ravelry credentials. Check RAVELRY_USERNAME and RAVELRY_PASSWORD." },
+        { error: "Invalid Ravelry credentials" },
         { status: 500 }
       );
     }
+    console.error(error);
     return NextResponse.json(
-      { error: `Failed to fetch yarn data: ${message}` },
+      { error: "Failed to fetch yarn data" },
       { status: 500 }
     );
   }

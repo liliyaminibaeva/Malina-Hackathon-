@@ -35,9 +35,9 @@ export async function POST(request: NextRequest) {
   let base64Image: string;
   try {
     const arrayBuffer = await imageFile.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    base64Image = buffer.toString("base64");
-  } catch {
+    base64Image = Buffer.from(arrayBuffer).toString("base64");
+  } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: "Failed to process image" },
       { status: 500 }
@@ -74,18 +74,27 @@ export async function POST(request: NextRequest) {
     });
 
     const textContent = response.content.find((block) => block.type === "text");
-    if (!textContent || textContent.type !== "text") {
+    if (!textContent) {
       return NextResponse.json(
         { error: "No text response from Claude" },
         { status: 500 }
       );
     }
 
-    let fields: Record<string, string>;
+    const rawText = (textContent as { type: "text"; text: string }).text;
+
+    let fields: unknown;
     try {
-      const jsonText = textContent.text.replace(/```json\n?|\n?```/g, "").trim();
+      const jsonText = rawText.replace(/```json\n?|\n?```/g, "").trim();
       fields = JSON.parse(jsonText);
-    } catch {
+      if (typeof fields !== "object" || fields === null || Array.isArray(fields)) {
+        return NextResponse.json(
+          { error: "Failed to parse Claude response as JSON" },
+          { status: 500 }
+        );
+      }
+    } catch (error) {
+      console.error(error);
       return NextResponse.json(
         { error: "Failed to parse Claude response as JSON" },
         { status: 500 }
@@ -93,7 +102,8 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ fields });
-  } catch {
+  } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

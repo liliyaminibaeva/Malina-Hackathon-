@@ -1,10 +1,16 @@
+export class RavelryError extends Error {
+  constructor(public readonly status: number, statusText: string) {
+    super(`Ravelry API error: ${status} ${statusText}`);
+  }
+}
+
 export interface RavelryYarn {
   id: number;
   name: string;
   yarn_company_name: string;
   yarn_weight: {
     name: string;
-  };
+  } | null;
   gauge_divisor: number | null;
   min_gauge: number | null;
   max_gauge: number | null;
@@ -39,12 +45,11 @@ export async function ravelryFetch(
   const response = await fetch(url.toString(), {
     headers: {
       Authorization: `Basic ${credentials}`,
-      "Content-Type": "application/json",
     },
   });
 
   if (!response.ok) {
-    throw new Error(`Ravelry API error: ${response.status} ${response.statusText}`);
+    throw new RavelryError(response.status, response.statusText);
   }
 
   return response.json();
