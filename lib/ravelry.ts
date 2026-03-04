@@ -18,18 +18,18 @@ export interface RavelryYarn {
   max_needle_size: number | null;
 }
 
-if (!process.env.RAVELRY_USERNAME || !process.env.RAVELRY_PASSWORD) {
-  throw new Error("Ravelry API credentials are not configured");
-}
-
 const RAVELRY_BASE = "https://api.ravelry.com";
-const RAVELRY_USERNAME = process.env.RAVELRY_USERNAME;
-const RAVELRY_PASSWORD = process.env.RAVELRY_PASSWORD;
 
 export async function ravelryFetch(
   path: string,
   params?: Record<string, string>
 ): Promise<unknown> {
+  const username = process.env.RAVELRY_USERNAME;
+  const password = process.env.RAVELRY_PASSWORD;
+  if (!username || !password) {
+    throw new Error("Ravelry API credentials are not configured");
+  }
+
   const url = new URL(`${RAVELRY_BASE}${path}`);
   if (params) {
     for (const [key, value] of Object.entries(params)) {
@@ -37,9 +37,7 @@ export async function ravelryFetch(
     }
   }
 
-  const credentials = Buffer.from(`${RAVELRY_USERNAME}:${RAVELRY_PASSWORD}`).toString(
-    "base64"
-  );
+  const credentials = Buffer.from(`${username}:${password}`).toString("base64");
 
   const response = await fetch(url.toString(), {
     headers: {

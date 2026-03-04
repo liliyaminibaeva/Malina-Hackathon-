@@ -2,6 +2,42 @@ import { NextRequest, NextResponse } from "next/server";
 import claude from "@/lib/claude";
 import { PHOTO_ANALYSIS_PROMPT } from "@/lib/prompts";
 
+function hasValidMagicBytes(bytes: Uint8Array, mimeType: string): boolean {
+  if (mimeType === "image/jpeg") {
+    return bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  }
+  if (mimeType === "image/png") {
+    return (
+      bytes[0] === 0x89 &&
+      bytes[1] === 0x50 &&
+      bytes[2] === 0x4e &&
+      bytes[3] === 0x47
+    );
+  }
+  if (mimeType === "image/gif") {
+    return (
+      bytes[0] === 0x47 &&
+      bytes[1] === 0x49 &&
+      bytes[2] === 0x46 &&
+      bytes[3] === 0x38
+    );
+  }
+  if (mimeType === "image/webp") {
+    return (
+      bytes[0] === 0x52 &&
+      bytes[1] === 0x49 &&
+      bytes[2] === 0x46 &&
+      bytes[3] === 0x46 &&
+      bytes.length > 11 &&
+      bytes[8] === 0x57 &&
+      bytes[9] === 0x45 &&
+      bytes[10] === 0x42 &&
+      bytes[11] === 0x50
+    );
+  }
+  return false;
+}
+
 export async function POST(request: NextRequest) {
   let formData: FormData;
   try {
@@ -39,10 +75,9 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  let base64Image: string;
+  let arrayBuffer: ArrayBuffer;
   try {
-    const arrayBuffer = await imageFile.arrayBuffer();
-    base64Image = Buffer.from(arrayBuffer).toString("base64");
+    arrayBuffer = await imageFile.arrayBuffer();
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -50,6 +85,16 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+
+  const header = new Uint8Array(arrayBuffer.slice(0, 12));
+  if (!hasValidMagicBytes(header, mimeType)) {
+    return NextResponse.json(
+      { error: "Invalid file type. Must be jpeg, png, gif, or webp" },
+      { status: 400 }
+    );
+  }
+
+  const base64Image = Buffer.from(arrayBuffer).toString("base64");
 
   try {
     const response = await claude.messages.create({
@@ -96,7 +141,7 @@ export async function POST(request: NextRequest) {
       const jsonText = jsonMatch ? jsonMatch[1].trim() : rawText.trim();
       fields = JSON.parse(jsonText);
       if (typeof fields !== "object" || fields === null || Array.isArray(fields)) {
-        console.error("Unexpected Claude response structure:", rawText.slice(0, 200));
+        console.error("Unexpected Claude response structure");
         return NextResponse.json(
           { error: "Failed to parse Claude response as JSON" },
           { status: 500 }

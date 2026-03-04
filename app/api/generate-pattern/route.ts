@@ -26,6 +26,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (!/^[a-zA-Z0-9 -]+$/.test(itemType.trim())) {
+    return NextResponse.json(
+      { error: "itemType contains invalid characters" },
+      { status: 400 }
+    );
+  }
+
   if (!yarnConfig || typeof yarnConfig !== "object" || Array.isArray(yarnConfig)) {
     return NextResponse.json(
       { error: "Missing required field: yarnConfig" },
