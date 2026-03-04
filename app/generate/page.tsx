@@ -52,8 +52,10 @@ export default function GeneratePage() {
         setPattern(result);
       } else if (result.pattern) {
         setPattern(result.pattern);
-      } else {
+      } else if (Array.isArray(result.sections) || result.raw) {
         setPattern(result);
+      } else {
+        throw new Error("Unexpected response format. Please try again.");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");

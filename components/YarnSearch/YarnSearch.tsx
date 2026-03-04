@@ -82,6 +82,7 @@ export default function YarnSearch() {
           return;
         }
         setSearchError(true);
+        setDropdownOpen(false);
         setSearching(false);
       }
     }, 300);
