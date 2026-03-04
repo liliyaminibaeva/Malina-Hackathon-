@@ -11,13 +11,16 @@ interface YarnResult {
   name: string;
   brand: string;
   weight: string;
+  gauge: number | null;
+  needleSize: number | null;
 }
 
 const WEIGHT_OPTIONS = ["lace", "fingering", "DK", "worsted", "bulky"];
 
 type FormValues = {
   weight: string;
-  gauge: string;
+  gaugeStitches: string;
+  gaugeRows: string;
   needleSize: string;
 };
 
@@ -42,7 +45,7 @@ export default function YarnSearch() {
     setValue,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: { weight: "", gauge: "", needleSize: "" },
+    defaultValues: { weight: "", gaugeStitches: "", gaugeRows: "", needleSize: "" },
   });
 
   const weightValue = watch("weight");
@@ -69,8 +72,8 @@ export default function YarnSearch() {
         );
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data)) {
-            setResults(data as YarnResult[]);
+          if (Array.isArray(data.yarns)) {
+            setResults(data.yarns as YarnResult[]);
             setDropdownOpen(true);
           } else {
             setSearchError(true);
@@ -115,13 +118,16 @@ export default function YarnSearch() {
     setSelectedYarn(yarn);
     setQuery(yarn.name);
     setDropdownOpen(false);
-    setValue("weight", yarn.weight);
+    setValue("weight", yarn.weight ?? "");
+    if (yarn.gauge != null) setValue("gaugeStitches", String(yarn.gauge));
+    if (yarn.needleSize != null) setValue("needleSize", String(yarn.needleSize));
   }
 
   function onSubmit(data: FormValues) {
     const config: YarnConfig = {
       weight: data.weight,
-      gauge: data.gauge,
+      gaugeStitches: data.gaugeStitches,
+      gaugeRows: data.gaugeRows,
       needleSize: data.needleSize,
       ...(selectedYarn
         ? { name: selectedYarn.name, brand: selectedYarn.brand }
@@ -226,29 +232,43 @@ export default function YarnSearch() {
 
         {/* Gauge */}
         <div className="space-y-1">
-          <label
-            htmlFor="gauge"
-            className="text-sm font-medium text-stone-700"
-          >
-            Gauge (stitches per 10 cm)
+          <label className="text-sm font-medium text-stone-700">
+            Gauge per 10 cm
           </label>
-          <input
-            id="gauge"
-            type="text"
-            inputMode="decimal"
-            placeholder="e.g. 22"
-            className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-800 placeholder-stone-400 outline-none transition-all focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
-            {...register("gauge", {
-              required: "Gauge is required",
-              pattern: {
-                value: /^\d+(\.\d+)?$/,
-                message: "Must be a number",
-              },
-            })}
-          />
-          {errors.gauge && (
-            <p className="text-xs text-red-500">{errors.gauge.message}</p>
-          )}
+          <div className="flex gap-3">
+            <div className="flex-1 space-y-1">
+              <input
+                id="gaugeStitches"
+                type="text"
+                inputMode="decimal"
+                placeholder="stitches (e.g. 22)"
+                className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-800 placeholder-stone-400 outline-none transition-all focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+                {...register("gaugeStitches", {
+                  required: "Required",
+                  pattern: { value: /^\d+(\.\d+)?$/, message: "Must be a number" },
+                })}
+              />
+              {errors.gaugeStitches && (
+                <p className="text-xs text-red-500">{errors.gaugeStitches.message}</p>
+              )}
+            </div>
+            <div className="flex-1 space-y-1">
+              <input
+                id="gaugeRows"
+                type="text"
+                inputMode="decimal"
+                placeholder="rows (e.g. 30)"
+                className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-800 placeholder-stone-400 outline-none transition-all focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+                {...register("gaugeRows", {
+                  required: "Required",
+                  pattern: { value: /^\d+(\.\d+)?$/, message: "Must be a number" },
+                })}
+              />
+              {errors.gaugeRows && (
+                <p className="text-xs text-red-500">{errors.gaugeRows.message}</p>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Needle size */}

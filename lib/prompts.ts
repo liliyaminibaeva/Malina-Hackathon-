@@ -4,7 +4,8 @@ export type StyleConfig = Record<string, string>;
 
 export interface YarnConfig {
   weight: string;
-  gauge: string;
+  gaugeStitches: string;
+  gaugeRows: string;
   needleSize: string;
   name?: string;
 }
@@ -188,7 +189,7 @@ export function getPatternPrompt(
 
 ${styleSection ? styleSection + "\n\n" : ""}Yarn details:
 Weight: ${yarnConfig.weight}
-Gauge: ${yarnConfig.gauge} stitches per 10 cm
+Gauge: ${yarnConfig.gaugeStitches} stitches and ${yarnConfig.gaugeRows} rows per 10 cm
 Needle size: ${yarnConfig.needleSize} mm
 
 ${CONSTRUCTION_NOTES[itemType]}

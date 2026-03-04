@@ -4,80 +4,34 @@ import { useRouter } from "next/navigation";
 import { usePatternForm } from "@/lib/store";
 import type { ItemType } from "@/lib/store";
 
-interface ItemCard {
+interface Item {
   id: ItemType;
   label: string;
-  icon: string;
 }
 
-const TOPS: ItemCard[] = [
-  { id: "sweater", label: "Sweater", icon: "🧥" },
-  { id: "slipover", label: "Slipover", icon: "🔷" },
-  { id: "t-shirt", label: "T-shirt", icon: "👕" },
+const TOPS: Item[] = [
+  { id: "sweater", label: "Sweater" },
+  { id: "slipover", label: "Slipover" },
+  { id: "t-shirt", label: "T-shirt" },
 ];
 
-const ACCESSORIES: ItemCard[] = [
-  { id: "beanie", label: "Beanie", icon: "🧢" },
-  { id: "gloves", label: "Gloves", icon: "🧤" },
-  { id: "scarf", label: "Scarf", icon: "🧣" },
-  { id: "minnens", label: "Minnens", icon: "🫱" },
-  { id: "hood", label: "Hood", icon: "🪡" },
+const ACCESSORIES: Item[] = [
+  { id: "beanie", label: "Beanie" },
+  { id: "gloves", label: "Gloves" },
+  { id: "scarf", label: "Scarf" },
+  { id: "minnens", label: "Mittens" },
+  { id: "hood", label: "Hood" },
 ];
 
-const BOTTOMS_COMING_SOON = [
-  { label: "Socks", icon: "🧦" },
-  { label: "Pants", icon: "👖" },
-  { label: "Shorts", icon: "🩳" },
-];
+const BOTTOMS_COMING_SOON = ["Socks", "Pants", "Shorts"];
 
-function Card({
-  label,
-  icon,
-  onClick,
-  disabled = false,
-}: {
-  label: string;
-  icon: string;
-  onClick?: () => void;
-  disabled?: boolean;
-}) {
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={[
-        "relative flex flex-col items-center justify-center gap-2 rounded-xl border p-5 text-center transition-all",
-        disabled
-          ? "cursor-not-allowed border-stone-200 bg-stone-50 opacity-50"
-          : "cursor-pointer border-stone-200 bg-white hover:border-stone-400 hover:shadow-sm active:scale-95",
-      ].join(" ")}
-    >
-      <span className="text-3xl" role="img" aria-label={label}>
-        {icon}
-      </span>
-      <span className="text-sm font-medium text-stone-700">{label}</span>
-      {disabled && (
-        <span className="absolute -top-2 right-2 rounded-full bg-stone-300 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
-          Soon
-        </span>
-      )}
-    </button>
-  );
-}
-
-function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="space-y-3">
-      <h2 className="text-xs font-semibold uppercase tracking-widest text-stone-400">
+    <section>
+      <p className="mb-3 text-[11px] font-medium uppercase tracking-[0.18em] text-stone-400">
         {title}
-      </h2>
-      <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
+      </p>
+      <div className="divide-y divide-stone-100 border-t border-stone-100">
         {children}
       </div>
     </section>
@@ -97,29 +51,41 @@ export default function ItemPicker() {
     <div className="space-y-10">
       <Section title="Tops">
         {TOPS.map((item) => (
-          <Card
+          <button
             key={item.id}
-            label={item.label}
-            icon={item.icon}
             onClick={() => handleSelect(item.id)}
-          />
+            className="flex w-full items-center justify-between py-3.5 text-left text-base text-stone-800 transition-colors hover:text-stone-500"
+          >
+            {item.label}
+            <span className="text-stone-300">→</span>
+          </button>
         ))}
       </Section>
 
       <Section title="Accessories">
         {ACCESSORIES.map((item) => (
-          <Card
+          <button
             key={item.id}
-            label={item.label}
-            icon={item.icon}
             onClick={() => handleSelect(item.id)}
-          />
+            className="flex w-full items-center justify-between py-3.5 text-left text-base text-stone-800 transition-colors hover:text-stone-500"
+          >
+            {item.label}
+            <span className="text-stone-300">→</span>
+          </button>
         ))}
       </Section>
 
       <Section title="Bottoms">
-        {BOTTOMS_COMING_SOON.map((item) => (
-          <Card key={item.label} label={item.label} icon={item.icon} disabled />
+        {BOTTOMS_COMING_SOON.map((label) => (
+          <div
+            key={label}
+            className="flex w-full items-center justify-between py-3.5 text-base text-stone-300"
+          >
+            {label}
+            <span className="text-[11px] uppercase tracking-widest text-stone-300">
+              Soon
+            </span>
+          </div>
         ))}
       </Section>
     </div>

@@ -19,7 +19,8 @@ export interface YarnConfig {
   name?: string;
   brand?: string;
   weight: string;
-  gauge: string;
+  gaugeStitches: string;
+  gaugeRows: string;
   needleSize: string;
 }
 
