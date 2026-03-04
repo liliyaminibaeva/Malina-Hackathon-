@@ -109,14 +109,14 @@ Steps:
 - Create: `app/yarn/page.tsx`
 
 Steps:
-- [ ] Build `YarnSearch` component with a search input
-- [ ] On input change (debounced 300ms): GET `/api/search-yarn?q=...`, show results dropdown
-- [ ] Each result shows: yarn name, brand, weight — clicking auto-fills the manual fields below
-- [ ] Manual entry section: weight (lace/fingering/DK/worsted/bulky), gauge (stitches per 10cm), needle size (mm)
-- [ ] react-hook-form for manual fields with validation (gauge and needle size must be numbers)
-- [ ] On submit: save yarn config to context, navigate to `/generate`
-- [ ] Redirect to `/configure` if no `styleConfig` in context
-- [ ] Run `npm run build`
+- [x] Build `YarnSearch` component with a search input
+- [x] On input change (debounced 300ms): GET `/api/search-yarn?q=...`, show results dropdown
+- [x] Each result shows: yarn name, brand, weight — clicking auto-fills the manual fields below
+- [x] Manual entry section: weight (lace/fingering/DK/worsted/bulky), gauge (stitches per 10cm), needle size (mm)
+- [x] react-hook-form for manual fields with validation (gauge and needle size must be numbers)
+- [x] On submit: save yarn config to context, navigate to `/generate`
+- [x] Redirect to `/configure` if no `styleConfig` in context
+- [x] Run `npm run build`
 
 ### Task 6: Step 4 — Generate and preview
 
