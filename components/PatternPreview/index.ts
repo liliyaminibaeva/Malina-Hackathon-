@@ -1,1 +1,1 @@
-export { default as PatternPreview } from "./PatternPreview";
+export { PatternPreview } from "./PatternPreview";

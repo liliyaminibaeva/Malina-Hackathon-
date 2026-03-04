@@ -1,103 +1,214 @@
 "use client";
 
+import React from "react";
 import { useRouter } from "next/navigation";
 import { usePatternForm } from "@/lib/store";
 
+interface PatternPreviewProps {
+  patternText: string;
+}
+
 interface PatternSection {
-  title: string;
+  heading: string;
   content: string;
 }
 
-interface PatternData {
-  sections?: PatternSection[];
-  raw?: string;
-}
-
-interface PatternPreviewProps {
-  pattern: PatternData | string;
-}
-
-function parseRawPattern(raw: string): PatternSection[] {
-  const lines = raw.split("\n");
+function parsePattern(text: string): PatternSection[] {
+  // Split on lines that are ALL CAPS followed by optional colon (section headers)
+  const sectionHeaderRegex = /^([A-Z][A-Z\s]+):?\s*$/m;
+  const lines = text.split("\n");
   const sections: PatternSection[] = [];
-  let current: PatternSection | null = null;
+
+  let currentHeading = "";
+  let currentLines: string[] = [];
 
   for (const line of lines) {
-    const trimmed = line.trim();
-    // Detect section headers: all-caps lines only (e.g. MATERIALS, GAUGE, INSTRUCTIONS)
-    const isHeader = /^[A-Z][A-Z\s&]{3,}:?$/.test(trimmed);
-
-    if (isHeader && trimmed.length > 0) {
-      if (current) sections.push(current);
-      current = { title: trimmed.replace(/:$/, ""), content: "" };
-    } else if (current) {
-      current.content += (current.content ? "\n" : "") + line;
-    } else if (trimmed) {
-      current = { title: "Pattern", content: line };
+    if (sectionHeaderRegex.test(line.trim()) && line.trim().length > 0) {
+      if (currentHeading || currentLines.some((l) => l.trim())) {
+        sections.push({
+          heading: currentHeading,
+          content: currentLines.join("\n").trim(),
+        });
+      }
+      currentHeading = line.trim().replace(/:$/, "");
+      currentLines = [];
+    } else {
+      currentLines.push(line);
     }
   }
-  if (current) sections.push(current);
-  return sections;
+
+  if (currentHeading || currentLines.some((l) => l.trim())) {
+    sections.push({
+      heading: currentHeading,
+      content: currentLines.join("\n").trim(),
+    });
+  }
+
+  return sections.filter((s) => s.heading || s.content);
 }
 
-export default function PatternPreview({ pattern }: PatternPreviewProps) {
+function renderMaterials(content: string) {
+  const items = content
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+  return (
+    <ul className="pattern-materials-list">
+      {items.map((item, i) => (
+        <li key={i}>{item}</li>
+      ))}
+    </ul>
+  );
+}
+
+function renderMeasurements(content: string) {
+  const lines = content
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+  return (
+    <table className="pattern-measurements-table">
+      <tbody>
+        {lines.map((line, i) => {
+          const colonIdx = line.indexOf(":");
+          if (colonIdx > -1) {
+            const label = line.slice(0, colonIdx).trim();
+            const value = line.slice(colonIdx + 1).trim();
+            return (
+              <tr key={i}>
+                <td className="pattern-measurements-label">{label}</td>
+                <td className="pattern-measurements-value">{value}</td>
+              </tr>
+            );
+          }
+          return (
+            <tr key={i}>
+              <td colSpan={2}>{line}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+}
+
+function renderInstructions(content: string) {
+  const lines = content
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+  return (
+    <div className="pattern-instructions">
+      {lines.map((line, i) => (
+        <p key={i} className="pattern-instruction-line">
+          {line}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function renderAbbreviations(content: string) {
+  const lines = content
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+  return (
+    <dl className="pattern-abbreviations">
+      {lines.map((line, i) => {
+        const colonIdx = line.indexOf(":");
+        if (colonIdx > -1) {
+          const abbr = line.slice(0, colonIdx).trim();
+          const def = line.slice(colonIdx + 1).trim();
+          return (
+            <div key={i} className="pattern-abbreviation-row">
+              <dt>{abbr}</dt>
+              <dd>{def}</dd>
+            </div>
+          );
+        }
+        return (
+          <div key={i} style={{ gridColumn: "1 / -1" }}>
+            <p className="pattern-line">{line}</p>
+          </div>
+        );
+      })}
+    </dl>
+  );
+}
+
+function renderDefaultContent(content: string) {
+  const lines = content
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+  return (
+    <div>
+      {lines.map((line, i) => (
+        <p key={i} className="pattern-line">
+          {line}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function renderSection(section: PatternSection) {
+  const heading = section.heading.toUpperCase();
+
+  if (heading === "MATERIALS") {
+    return renderMaterials(section.content);
+  }
+  if (heading === "FINISHED MEASUREMENTS" || heading === "SIZES") {
+    return renderMeasurements(section.content);
+  }
+  if (heading === "INSTRUCTIONS") {
+    return renderInstructions(section.content);
+  }
+  if (heading === "ABBREVIATIONS") {
+    return renderAbbreviations(section.content);
+  }
+  return renderDefaultContent(section.content);
+}
+
+export function PatternPreview({ patternText }: PatternPreviewProps) {
   const router = useRouter();
   const { reset } = usePatternForm();
 
-  const sections: PatternSection[] =
-    typeof pattern === "string"
-      ? parseRawPattern(pattern)
-      : Array.isArray(pattern.sections)
-        ? pattern.sections
-        : (pattern.raw ? parseRawPattern(pattern.raw) : []);
-
-  const rawText =
-    typeof pattern === "string"
-      ? pattern
-      : pattern.raw ?? sections.map((s) => `${s.title}\n${s.content}`).join("\n\n");
+  if (!patternText.trim()) {
+    return null;
+  }
 
   function handleStartOver() {
     reset();
     router.push("/");
   }
 
+  const sections = parsePattern(patternText);
+
   return (
-    <div>
-      {/* Action bar — hidden on print */}
-      <div className="no-print mb-8 flex flex-wrap gap-3">
-        <button
-          onClick={() => window.print()}
-          className="rounded-xl border border-stone-300 bg-white px-5 py-2.5 text-sm font-medium text-stone-700 transition-all hover:border-stone-400 hover:bg-stone-50 active:scale-95"
-        >
+    <div className="pattern-preview-wrapper">
+      <div className="pattern-preview-toolbar no-print">
+        <button onClick={() => window.print()} className="pattern-print-button">
           Print / Save as PDF
         </button>
-        <button
-          onClick={handleStartOver}
-          className="rounded-xl border border-stone-200 px-5 py-2.5 text-sm font-medium text-stone-500 transition-all hover:border-stone-300 hover:text-stone-700 active:scale-95"
-        >
+        <button onClick={handleStartOver} className="pattern-start-over-button">
           Start over
         </button>
       </div>
 
-      {/* Pattern content */}
-      {sections.length > 0 ? (
-        <div className="space-y-8 print:space-y-6">
-          {sections.map((section, i) => (
-            <section key={`${section.title}-${i}`}>
-              <h2 className="mb-3 text-sm font-semibold uppercase tracking-widest text-stone-500 print:text-black">
-                {section.title}
-              </h2>
-              <div className="whitespace-pre-wrap rounded-2xl border border-stone-100 bg-white p-5 text-sm leading-relaxed text-stone-800 print:rounded-none print:border-0 print:p-0">
-                {section.content}
-              </div>
-            </section>
-          ))}
-        </div>
-      ) : (
-        <pre className="whitespace-pre-wrap rounded-2xl border border-stone-100 bg-white p-6 text-sm leading-relaxed text-stone-800">
-          {rawText}
-        </pre>
-      )}
+      <div className="pattern-preview-content" id="pattern-preview-content">
+        {sections.map((section, i) => (
+          <div key={i} className="pattern-section">
+            {section.heading && (
+              <h2 className="pattern-section-heading">{section.heading}</h2>
+            )}
+            <div className="pattern-section-body">
+              {renderSection(section)}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

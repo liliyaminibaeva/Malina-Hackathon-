@@ -8,7 +8,6 @@ import { usePatternForm } from "@/lib/store";
 import { PatternPreview } from "@/components/PatternPreview";
 import { StepIndicator } from "@/components/StepIndicator";
 
-type PatternResult = { sections?: { title: string; content: string }[]; raw?: string } | string;
 type EmailFormValues = { email: string };
 
 export default function GeneratePage() {
@@ -17,7 +16,7 @@ export default function GeneratePage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [pattern, setPattern] = useState<PatternResult | null>(null);
+  const [pattern, setPattern] = useState<string | null>(null);
 
   const {
     register,
@@ -47,13 +46,8 @@ export default function GeneratePage() {
         throw new Error("Pattern generation failed. Please try again.");
       }
       const result = await res.json();
-      // Support { pattern: "..." }, { sections: [...] }, or raw string
-      if (typeof result === "string") {
-        setPattern(result);
-      } else if (result.pattern) {
+      if (typeof result.pattern === "string") {
         setPattern(result.pattern);
-      } else if (Array.isArray(result.sections) || result.raw) {
-        setPattern(result);
       } else {
         throw new Error("Unexpected response format. Please try again.");
       }
@@ -136,7 +130,7 @@ export default function GeneratePage() {
           <p className="mb-8 text-stone-500 no-print">
             Your pattern is ready. Print or save it as a PDF to keep it.
           </p>
-          <PatternPreview pattern={pattern} />
+          <PatternPreview patternText={pattern} />
         </>
       )}
     </main>
