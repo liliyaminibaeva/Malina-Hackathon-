@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePatternForm } from "@/lib/store";
 import type { StyleConfig } from "@/lib/store";
 import { ConfigForm } from "@/components/ConfigForms";
 import PhotoUpload from "@/components/ConfigForms/PhotoUpload";
+import { StepIndicator } from "@/components/StepIndicator";
 
 type Path = "manual" | "photo";
 
@@ -71,11 +73,19 @@ export default function ConfigurePage() {
   }
 
   return (
-    <main className="mx-auto min-h-screen max-w-5xl px-6 py-16">
-      <div className="mb-10 space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-widest text-stone-400">
-          Step 2 of 4
-        </p>
+    <main className="mx-auto min-h-screen max-w-5xl px-6 py-12">
+      <StepIndicator current={2} />
+
+      <div className="mb-8 space-y-2">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/"
+            className="flex items-center gap-1 text-sm text-stone-500 hover:text-stone-800"
+            aria-label="Back to item selection"
+          >
+            ← Back
+          </Link>
+        </div>
         <h1 className="text-3xl font-semibold tracking-tight text-stone-900">
           Configure your {itemLabel}
         </h1>
@@ -85,7 +95,7 @@ export default function ConfigurePage() {
       </div>
 
       {!selectedPath && (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <button
             onClick={() => setSelectedPath("manual")}
             className="flex flex-col items-center gap-3 rounded-xl border border-stone-200 bg-white p-6 text-center transition-all hover:border-stone-400 hover:shadow-sm active:scale-95"

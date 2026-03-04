@@ -28,6 +28,7 @@ export default function YarnSearch() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<YarnResult[]>([]);
   const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedYarn, setSelectedYarn] = useState<YarnResult | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -51,10 +52,12 @@ export default function YarnSearch() {
     if (!query.trim()) {
       setResults([]);
       setDropdownOpen(false);
+      setSearchError(false);
       return;
     }
     debounceRef.current = setTimeout(async () => {
       setSearching(true);
+      setSearchError(false);
       try {
         const res = await fetch(
           `/api/search-yarn?q=${encodeURIComponent(query.trim())}`
@@ -63,9 +66,11 @@ export default function YarnSearch() {
           const data: YarnResult[] = await res.json();
           setResults(data);
           setDropdownOpen(true);
+        } else {
+          setSearchError(true);
         }
       } catch {
-        // ignore — manual entry still available
+        setSearchError(true);
       } finally {
         setSearching(false);
       }
@@ -157,6 +162,12 @@ export default function YarnSearch() {
             </div>
           )}
         </div>
+
+        {searchError && (
+          <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-700">
+            Yarn search is unavailable — fill in the details manually below.
+          </p>
+        )}
       </div>
 
       {/* Manual entry */}

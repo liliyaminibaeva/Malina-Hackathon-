@@ -85,7 +85,7 @@ export default function ConfigForm({ defaultValues }: ConfigFormProps) {
 
       <button
         type="submit"
-        className="mt-4 w-full rounded-xl bg-stone-900 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-stone-700 active:scale-95 disabled:opacity-50"
+        className="mt-4 w-full rounded-xl bg-stone-900 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-stone-700 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
         disabled={fields.some((f) => !values[f.name])}
       >
         Continue to yarn selection

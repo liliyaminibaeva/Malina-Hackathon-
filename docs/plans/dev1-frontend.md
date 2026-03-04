@@ -142,13 +142,13 @@ Steps:
 - Modify: various component files
 
 Steps:
-- [ ] Verify all pages are responsive on mobile (375px) and desktop (1280px)
-- [ ] Add step indicator (1 → 2 → 3 → 4) at top of all pages except `/`
-- [ ] Add back navigation on steps 2, 3, 4
-- [ ] Consistent button styles: primary (dark fill), secondary (outline), disabled state
-- [ ] Loading states on all API calls
-- [ ] Empty/error states on yarn search and photo upload
-- [ ] Run `npm run build` — clean final build
+- [x] Verify all pages are responsive on mobile (375px) and desktop (1280px)
+- [x] Add step indicator (1 → 2 → 3 → 4) at top of all pages except `/`
+- [x] Add back navigation on steps 2, 3, 4
+- [x] Consistent button styles: primary (dark fill), secondary (outline), disabled state
+- [x] Loading states on all API calls
+- [x] Empty/error states on yarn search and photo upload
+- [x] Run `npm run build` — clean final build
 
 ## Post-Completion
 

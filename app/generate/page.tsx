@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePatternForm } from "@/lib/store";
 import { PatternPreview } from "@/components/PatternPreview";
+import { StepIndicator } from "@/components/StepIndicator";
 
 type PatternResult = { sections?: { title: string; content: string }[]; raw?: string } | string;
 
@@ -55,8 +57,20 @@ export default function GeneratePage() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-12">
+      <StepIndicator current={4} />
+
       {!pattern ? (
         <>
+          <div className="mb-6 no-print">
+            <Link
+              href="/yarn"
+              className="flex items-center gap-1 text-sm text-stone-500 hover:text-stone-800"
+              aria-label="Back to yarn selection"
+            >
+              ← Back
+            </Link>
+          </div>
+
           <h1 className="mb-2 text-2xl font-semibold text-stone-900">
             Generate your pattern
           </h1>
