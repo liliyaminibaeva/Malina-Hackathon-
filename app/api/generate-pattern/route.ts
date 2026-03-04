@@ -26,9 +26,12 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const yarnWeight = (yarnConfig as Record<string, unknown>).weight;
   if (
     !("weight" in (yarnConfig as Record<string, unknown>)) ||
-    (yarnConfig as Record<string, unknown>).weight == null
+    yarnWeight == null ||
+    typeof yarnWeight !== "string" ||
+    yarnWeight.trim() === ""
   ) {
     return NextResponse.json(
       { error: "yarnConfig must include at least a weight field" },

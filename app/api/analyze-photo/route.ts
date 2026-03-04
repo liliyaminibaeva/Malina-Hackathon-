@@ -24,6 +24,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (imageFile.size === 0) {
+    return NextResponse.json(
+      { error: "Image file is empty" },
+      { status: 400 }
+    );
+  }
+
   const maxSize = 10 * 1024 * 1024; // 10MB
   if (imageFile.size > maxSize) {
     return NextResponse.json(
@@ -88,6 +95,7 @@ export async function POST(request: NextRequest) {
       const jsonText = rawText.replace(/```json\n?|\n?```/g, "").trim();
       fields = JSON.parse(jsonText);
       if (typeof fields !== "object" || fields === null || Array.isArray(fields)) {
+        console.error("Unexpected Claude response structure:", rawText);
         return NextResponse.json(
           { error: "Failed to parse Claude response as JSON" },
           { status: 500 }

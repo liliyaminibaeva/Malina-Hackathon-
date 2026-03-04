@@ -18,6 +18,10 @@ export interface RavelryYarn {
   max_needle_size: number | null;
 }
 
+if (!process.env.RAVELRY_USERNAME || !process.env.RAVELRY_PASSWORD) {
+  throw new Error("RAVELRY_USERNAME and RAVELRY_PASSWORD must be set");
+}
+
 const RAVELRY_BASE = "https://api.ravelry.com";
 
 export async function ravelryFetch(

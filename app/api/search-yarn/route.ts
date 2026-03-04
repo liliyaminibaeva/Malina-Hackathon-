@@ -34,6 +34,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ yarns });
   } catch (error) {
     if (error instanceof RavelryError && error.status === 401) {
+      console.error(error);
       return NextResponse.json(
         { error: "Invalid Ravelry credentials" },
         { status: 500 }
