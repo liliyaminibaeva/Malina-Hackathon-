@@ -1,61 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePatternForm } from "@/lib/store";
 import type { StyleConfig } from "@/lib/store";
 import { ConfigForm, PhotoUpload } from "@/components/ConfigForms";
 import { StepIndicator } from "@/components/StepIndicator";
-
-type Path = "manual" | "photo";
-
-// Static placeholder images for the Ravelry-like section
-const RAVELRY_PLACEHOLDERS = [
-  { id: 1, bg: "bg-stone-200", label: "Pattern A" },
-  { id: 2, bg: "bg-stone-300", label: "Pattern B" },
-  { id: 3, bg: "bg-stone-200", label: "Pattern C" },
-  { id: 4, bg: "bg-stone-300", label: "Pattern D" },
-];
-
-function RavelryPlaceholder() {
-  return (
-    <div className="rounded-xl border border-stone-200 bg-white p-5 shadow-sm">
-      <div className="mb-3 flex items-center gap-2">
-        <span className="text-lg" role="img" aria-label="Ravelry">
-          🧶
-        </span>
-        <p className="font-semibold text-stone-800">Similar patterns on Ravelry</p>
-      </div>
-      <p className="mb-4 text-sm text-stone-400">
-        Inspiration picked from patterns matching your style.
-      </p>
-      <div className="grid grid-cols-2 gap-2">
-        {RAVELRY_PLACEHOLDERS.map((p) => (
-          <div
-            key={p.id}
-            className={`${p.bg} flex h-24 items-end rounded-lg p-2`}
-          >
-            <span className="rounded bg-white/80 px-1.5 py-0.5 text-xs text-stone-600">
-              {p.label}
-            </span>
-          </div>
-        ))}
-      </div>
-      <p className="mt-3 text-xs text-stone-300 italic">
-        Ravelry integration coming soon
-      </p>
-    </div>
-  );
-}
+import { GarmentMockup } from "@/components/GarmentMockup";
 
 export default function ConfigurePage() {
   const router = useRouter();
   const { itemType } = usePatternForm();
-  const [selectedPath, setSelectedPath] = useState<Path | null>(null);
-  const [photoDefaults, setPhotoDefaults] = useState<StyleConfig | undefined>(
-    undefined
-  );
+  const [photoDefaults, setPhotoDefaults] = useState<StyleConfig | undefined>(undefined);
+  const [currentValues, setCurrentValues] = useState<StyleConfig>({});
 
   useEffect(() => {
     if (!itemType) {
@@ -63,109 +21,67 @@ export default function ConfigurePage() {
     }
   }, [itemType, router]);
 
+  const handleValuesChange = useCallback((values: StyleConfig) => {
+    setCurrentValues(values);
+  }, []);
+
   if (!itemType) return null;
 
   const itemLabel = itemType.charAt(0).toUpperCase() + itemType.slice(1);
 
   return (
-    <main className="mx-auto min-h-screen max-w-5xl px-6 py-12">
+    <main className="mx-auto min-h-screen max-w-5xl px-8 py-16">
+      {/* Header */}
+      <header className="mb-10">
+        <div className="flex items-baseline justify-between border-b border-t border-[#DDD8CF] py-3">
+          <span className="text-xs font-medium uppercase tracking-[0.25em] text-[#1A1814]">Malina</span>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#7A7068]">Pattern Generator</span>
+        </div>
+      </header>
+
       <StepIndicator current={2} />
 
-      <div className="mb-8 space-y-2">
-        {!selectedPath && (
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="flex items-center gap-1 text-sm text-stone-500 hover:text-stone-800"
-              aria-label="Back to item selection"
-            >
-              ← Back
-            </Link>
+      <Link
+        href="/"
+        className="text-[10px] uppercase tracking-[0.12em] text-[#7A7068] hover:text-[#1A1814] transition-colors mb-8 inline-block"
+      >
+        ← Back
+      </Link>
+
+      <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1fr_420px]">
+        {/* Left: form */}
+        <div>
+          <h1 className="font-serif text-4xl font-light mb-2 text-[#1A1814]">{itemLabel}</h1>
+          <p className="text-sm text-[#7A7068] mb-8">Configure your pattern options.</p>
+
+          {/* Photo upload toggle */}
+          <details className="mb-8 border border-[#DDD8CF] p-4">
+            <summary className="text-[10px] uppercase tracking-[0.2em] text-[#7A7068] cursor-pointer">
+              Upload a photo to pre-fill options
+            </summary>
+            <div className="mt-4">
+              <PhotoUpload
+                onAnalysisComplete={setPhotoDefaults}
+                onReset={() => setPhotoDefaults(undefined)}
+              />
+            </div>
+          </details>
+
+          <ConfigForm
+            key={JSON.stringify(photoDefaults)}
+            defaultValues={photoDefaults}
+            onValuesChange={handleValuesChange}
+          />
+        </div>
+
+        {/* Right: live mockup — sticky */}
+        <div className="hidden lg:block">
+          <div className="sticky top-16">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[#7A7068] mb-4">Preview</p>
+            <GarmentMockup itemType={itemType} styleConfig={currentValues} />
           </div>
-        )}
-        <h1 className="text-3xl font-semibold tracking-tight text-stone-900">
-          Configure your {itemLabel}
-        </h1>
-        <p className="text-stone-500">
-          Choose how you&apos;d like to set your style preferences.
-        </p>
+        </div>
       </div>
-
-      {!selectedPath && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <button
-            onClick={() => setSelectedPath("manual")}
-            className="flex flex-col items-center gap-3 rounded-xl border border-stone-200 bg-white p-6 text-center transition-all hover:border-stone-400 hover:shadow-sm active:scale-95"
-          >
-            <span className="text-3xl" role="img" aria-label="Manual entry">
-              ✍️
-            </span>
-            <div>
-              <p className="font-semibold text-stone-800">Manual entry</p>
-              <p className="mt-1 text-sm text-stone-500">
-                Pick your style options yourself
-              </p>
-            </div>
-          </button>
-
-          <button
-            onClick={() => setSelectedPath("photo")}
-            className="flex flex-col items-center gap-3 rounded-xl border border-stone-200 bg-white p-6 text-center transition-all hover:border-stone-400 hover:shadow-sm active:scale-95"
-          >
-            <span className="text-3xl" role="img" aria-label="Photo upload">
-              📷
-            </span>
-            <div>
-              <p className="font-semibold text-stone-800">Upload a photo</p>
-              <p className="mt-1 text-sm text-stone-500">
-                We&apos;ll analyse your inspiration image
-              </p>
-            </div>
-          </button>
-        </div>
-      )}
-
-      {selectedPath && (
-        <div className="space-y-6">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => {
-                setSelectedPath(null);
-                setPhotoDefaults(undefined);
-              }}
-              className="flex items-center gap-1 text-sm text-stone-500 hover:text-stone-800"
-              aria-label="Change path"
-            >
-              ← Back
-            </button>
-            <span className="text-sm text-stone-400">
-              {selectedPath === "manual" ? "Manual entry" : "Photo upload"}
-            </span>
-          </div>
-
-          {selectedPath === "manual" && <ConfigForm />}
-
-          {selectedPath === "photo" && (
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-              {/* Left column: photo upload + Ravelry placeholder */}
-              <div className="space-y-6">
-                <PhotoUpload onAnalysisComplete={setPhotoDefaults} onReset={() => setPhotoDefaults(undefined)} />
-                <RavelryPlaceholder />
-              </div>
-
-              {/* Right column: config form (pre-filled once photo is analysed) */}
-              <div>
-                {photoDefaults && (
-                  <p className="mb-3 text-sm font-medium text-stone-600">
-                    Style options detected from your photo — adjust as needed:
-                  </p>
-                )}
-                <ConfigForm key={JSON.stringify(photoDefaults)} defaultValues={photoDefaults} />
-              </div>
-            </div>
-          )}
-        </div>
-      )}
     </main>
   );
 }

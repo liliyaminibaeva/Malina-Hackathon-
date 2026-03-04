@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { usePatternForm } from "@/lib/store";
@@ -21,7 +22,7 @@ function ToggleGroup({
 }) {
   return (
     <div className="space-y-2">
-      <p className="text-sm font-medium text-stone-700">{label}</p>
+      <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-[#7A7068] mb-2">{label}</p>
       <div className="flex flex-wrap gap-2">
         {options.map((opt) => (
           <button
@@ -29,10 +30,10 @@ function ToggleGroup({
             type="button"
             onClick={() => onChange(opt)}
             className={[
-              "rounded-lg border px-3 py-1.5 text-sm transition-all",
+              "border px-4 py-2 text-sm transition-all",
               value === opt
-                ? "border-stone-800 bg-stone-800 text-white"
-                : "border-stone-200 bg-white text-stone-700 hover:border-stone-400",
+                ? "border-[#1A1814] bg-[#1A1814] text-white"
+                : "border-[#DDD8CF] bg-white text-[#1A1814] hover:border-[#1A1814]",
             ].join(" ")}
             aria-pressed={value === opt}
             data-field={name}
@@ -47,9 +48,10 @@ function ToggleGroup({
 
 interface ConfigFormProps {
   defaultValues?: StyleConfig;
+  onValuesChange?: (values: StyleConfig) => void;
 }
 
-export default function ConfigForm({ defaultValues }: ConfigFormProps) {
+export default function ConfigForm({ defaultValues, onValuesChange }: ConfigFormProps) {
   const router = useRouter();
   const { itemType, setStyleConfig } = usePatternForm();
 
@@ -60,6 +62,10 @@ export default function ConfigForm({ defaultValues }: ConfigFormProps) {
   });
 
   const values = watch();
+
+  useEffect(() => {
+    onValuesChange?.(values);
+  }, [values, onValuesChange]);
 
   function onSubmit(data: StyleConfig) {
     const filtered = Object.fromEntries(
@@ -88,7 +94,7 @@ export default function ConfigForm({ defaultValues }: ConfigFormProps) {
 
       <button
         type="submit"
-        className="mt-4 w-full rounded-xl bg-stone-900 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-stone-700 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full bg-[#1A1814] text-white px-8 py-3.5 text-xs font-medium uppercase tracking-[0.1em] transition-opacity hover:opacity-70 mt-6 disabled:opacity-30 disabled:cursor-not-allowed"
         disabled={fields.some((f) => !values[f.name])}
       >
         Continue to yarn selection

@@ -271,10 +271,10 @@ Update `StepIndicator.tsx` to pattern-book style:
 - Future: `text-[10px] uppercase tracking-[0.15em] text-[#DDD8CF]`
 - Separator: `mx-3 text-[#DDD8CF]` with `·` character
 
-- [ ] Redesign `app/configure/page.tsx` with two-column layout and photo upload in `<details>`
-- [ ] Add `onValuesChange` prop to `ConfigForm.tsx` and update toggle/submit styles
-- [ ] Update `PhotoUpload.tsx` to remove emoji and clean up styles
-- [ ] Update `StepIndicator.tsx` to text-only pattern-book style
+- [x] Redesign `app/configure/page.tsx` with two-column layout and photo upload in `<details>`
+- [x] Add `onValuesChange` prop to `ConfigForm.tsx` and update toggle/submit styles
+- [x] Update `PhotoUpload.tsx` to remove emoji and clean up styles
+- [x] Update `StepIndicator.tsx` to text-only pattern-book style
 
 ### Task 7: Remove email gate, render pattern as HTML
 
