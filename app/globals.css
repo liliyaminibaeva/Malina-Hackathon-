@@ -24,3 +24,186 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* PatternPreview styles */
+.pattern-preview-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.pattern-preview-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.pattern-print-button {
+  padding: 0.5rem 1.25rem;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.pattern-print-button:hover {
+  background: #333;
+}
+
+.pattern-preview-content {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #111;
+}
+
+.pattern-section {
+  margin-bottom: 2rem;
+  page-break-inside: avoid;
+}
+
+.pattern-section-heading {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.75rem;
+  color: #111;
+}
+
+.pattern-section-body {
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.pattern-line {
+  margin: 0.2rem 0;
+}
+
+/* Materials */
+.pattern-materials-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pattern-materials-list li {
+  padding: 0.1rem 0;
+}
+
+/* Measurements table */
+.pattern-measurements-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.pattern-measurements-label {
+  padding-right: 1.5rem;
+  font-weight: 500;
+  vertical-align: top;
+  white-space: nowrap;
+  color: #444;
+  width: 1%;
+}
+
+.pattern-measurements-value {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.9rem;
+}
+
+/* Instructions */
+.pattern-instructions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pattern-instruction-line {
+  padding-left: 1.25rem;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+/* Abbreviations */
+.pattern-abbreviations {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.1rem 1rem;
+  margin: 0;
+}
+
+.pattern-abbreviation-row {
+  display: contents;
+}
+
+.pattern-abbreviations dt {
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 600;
+  font-size: 0.9rem;
+  align-self: baseline;
+}
+
+.pattern-abbreviations dd {
+  margin: 0;
+  align-self: baseline;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body > *:not(.pattern-preview-wrapper),
+  body > *:not(#__next),
+  header,
+  nav,
+  footer,
+  aside {
+    display: none !important;
+  }
+
+  .pattern-preview-wrapper {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .pattern-preview-content {
+    color: #000;
+    font-size: 11pt;
+    line-height: 1.6;
+  }
+
+  .pattern-section {
+    page-break-inside: avoid;
+    margin-bottom: 1.2rem;
+  }
+
+  .pattern-section-heading {
+    page-break-after: avoid;
+    color: #000;
+    border-bottom: 0.5pt solid #000;
+  }
+
+  .pattern-print-button {
+    display: none;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+
+  .pattern-measurements-value {
+    font-size: 10pt;
+  }
+}
