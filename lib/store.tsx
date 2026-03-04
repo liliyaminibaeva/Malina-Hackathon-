@@ -9,7 +9,7 @@ export type ItemType =
   | "beanie"
   | "gloves"
   | "scarf"
-  | "mittens"
+  | "minnens"
   | "hood"
   | null;
 

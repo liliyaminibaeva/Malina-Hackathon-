@@ -25,7 +25,7 @@ function parseRawPattern(raw: string): PatternSection[] {
   for (const line of lines) {
     const trimmed = line.trim();
     // Detect section headers: all-caps lines only (e.g. MATERIALS, GAUGE, INSTRUCTIONS)
-    const isHeader = /^[A-Z][A-Z\s&]{3,}$/.test(trimmed);
+    const isHeader = /^[A-Z][A-Z\s&]{3,}:?$/.test(trimmed);
 
     if (isHeader && trimmed.length > 0) {
       if (current) sections.push(current);

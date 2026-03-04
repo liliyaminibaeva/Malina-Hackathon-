@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import type { StyleConfig } from "@/lib/store";
 
 interface PhotoUploadProps {
@@ -12,10 +12,15 @@ type UploadState = "idle" | "loading" | "done" | "error";
 
 export default function PhotoUpload({ onAnalysisComplete, onReset }: PhotoUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploadState, setUploadState] = useState<UploadState>("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    return () => { abortRef.current?.abort(); };
+  }, []);
 
   function handleFile(file: File) {
     if (!file.type.startsWith("image/")) {
@@ -38,6 +43,8 @@ export default function PhotoUpload({ onAnalysisComplete, onReset }: PhotoUpload
   }
 
   async function uploadFile(file: File) {
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
     setUploadState("loading");
     setErrorMsg("");
 
@@ -48,6 +55,7 @@ export default function PhotoUpload({ onAnalysisComplete, onReset }: PhotoUpload
       const res = await fetch("/api/analyze-photo", {
         method: "POST",
         body: formData,
+        signal: abortRef.current.signal,
       });
 
       if (!res.ok) {
@@ -57,7 +65,8 @@ export default function PhotoUpload({ onAnalysisComplete, onReset }: PhotoUpload
       const data: StyleConfig = await res.json();
       setUploadState("done");
       onAnalysisComplete(data);
-    } catch {
+    } catch (err) {
+      if (err instanceof Error && err.name === "AbortError") return;
       setErrorMsg(
         "Could not analyse the photo. You can still fill in the form manually."
       );

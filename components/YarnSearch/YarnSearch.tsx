@@ -76,7 +76,6 @@ export default function YarnSearch() {
         setSearching(false);
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") {
-          setSearching(false);
           return;
         }
         setSearchError(true);

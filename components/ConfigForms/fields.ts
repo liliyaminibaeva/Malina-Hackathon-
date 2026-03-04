@@ -114,7 +114,7 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
       options: ["Stockinette", "Garter", "Ribbed", "Textured"],
     },
   ],
-  mittens: [
+  minnens: [
     {
       name: "cuffStyle",
       label: "Cuff style",

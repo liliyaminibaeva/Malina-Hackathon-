@@ -20,7 +20,7 @@ const ACCESSORIES: ItemCard[] = [
   { id: "beanie", label: "Beanie", icon: "🧢" },
   { id: "gloves", label: "Gloves", icon: "🧤" },
   { id: "scarf", label: "Scarf", icon: "🧣" },
-  { id: "mittens", label: "Mittens", icon: "🫱" },
+  { id: "minnens", label: "Minnens", icon: "🫱" },
   { id: "hood", label: "Hood", icon: "🪡" },
 ];
 
