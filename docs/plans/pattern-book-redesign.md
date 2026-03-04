@@ -52,8 +52,8 @@ const sourceSerif = Source_Serif_4({
 ```
 Add `sourceSerif.variable` to the body className.
 
-- [ ] Update globals.css with new design tokens and @theme inline
-- [ ] Add Source Serif 4 font to layout.tsx
+- [x] Update globals.css with new design tokens and @theme inline
+- [x] Add Source Serif 4 font to layout.tsx
 
 ### Task 2: Create SVG item schematic icons
 
