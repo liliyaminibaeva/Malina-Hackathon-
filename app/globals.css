@@ -24,6 +24,7 @@ body {
 /* Print styles for pattern output */
 @media print {
   nav,
+  header,
   button,
   .no-print {
     display: none !important;
@@ -39,6 +40,21 @@ body {
   main {
     max-width: 100%;
     margin: 0;
-    padding: 0;
+    padding: 1cm;
+  }
+
+  h1 {
+    font-size: 18pt;
+    margin-bottom: 0.5cm;
+  }
+
+  h2 {
+    font-size: 11pt;
+    margin-bottom: 0.25cm;
+    page-break-after: avoid;
+  }
+
+  section {
+    page-break-inside: avoid;
   }
 }

@@ -126,15 +126,15 @@ Steps:
 - Create: `app/generate/page.tsx`
 
 Steps:
-- [ ] `app/generate/page.tsx`: email input field + "Generate pattern" button
-- [ ] On submit: POST to `/api/generate-pattern` with full config from context, show loading state ("Generating your pattern...")
-- [ ] On response: render `PatternPreview` with the returned pattern HTML/text
-- [ ] `PatternPreview`: display pattern sections clearly — header, materials, gauge, abbreviations, notes, instructions
-- [ ] Add "Print / Save as PDF" button that calls `window.print()`
-- [ ] Add print CSS in `globals.css`: hide nav/buttons, clean single-column layout for print
-- [ ] "Start over" button that clears context and navigates to `/`
-- [ ] Redirect to `/yarn` if no yarn config in context
-- [ ] Run `npm run build`
+- [x] `app/generate/page.tsx`: email input field + "Generate pattern" button
+- [x] On submit: POST to `/api/generate-pattern` with full config from context, show loading state ("Generating your pattern...")
+- [x] On response: render `PatternPreview` with the returned pattern HTML/text
+- [x] `PatternPreview`: display pattern sections clearly — header, materials, gauge, abbreviations, notes, instructions
+- [x] Add "Print / Save as PDF" button that calls `window.print()`
+- [x] Add print CSS in `globals.css`: hide nav/buttons, clean single-column layout for print
+- [x] "Start over" button that clears context and navigates to `/`
+- [x] Redirect to `/yarn` if no yarn config in context
+- [x] Run `npm run build`
 
 ### Task 7: Polish and mobile responsiveness
 
