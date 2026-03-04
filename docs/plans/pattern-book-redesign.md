@@ -368,5 +368,5 @@ Update `components/YarnSearch/YarnSearch.tsx`:
 - Submit button: same primary button style as other pages
 - Errors: `text-[11px] text-red-500 mt-1`
 
-- [ ] Update `app/yarn/page.tsx` header and typography
-- [ ] Update `components/YarnSearch/YarnSearch.tsx` input and layout styles
+- [x] Update `app/yarn/page.tsx` header and typography
+- [x] Update `components/YarnSearch/YarnSearch.tsx` input and layout styles

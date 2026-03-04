@@ -141,7 +141,7 @@ export default function YarnSearch() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {/* Yarn search */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-stone-700">
+        <label className="text-[10px] font-medium uppercase tracking-[0.18em] text-[#7A7068] mb-2 block">
           Search yarn (optional)
         </label>
         <div className="relative" ref={dropdownRef}>
@@ -150,27 +150,27 @@ export default function YarnSearch() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="e.g. Drops Alaska, Sandnes Garn…"
-            className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-800 placeholder-stone-400 outline-none transition-all focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+            className="border-b border-[#DDD8CF] bg-transparent px-0 py-2.5 text-sm text-[#1A1814] placeholder-[#C8C2B8] outline-none focus:border-[#1A1814] w-full"
           />
           {searching && (
-            <span className="absolute right-3 top-2.5 text-xs text-stone-400">
+            <span className="absolute right-0 top-2.5 text-[10px] uppercase tracking-[0.1em] text-[#7A7068]">
               Searching…
             </span>
           )}
 
           {dropdownOpen && results.length > 0 && (
-            <ul className="absolute z-10 mt-1 w-full rounded-xl border border-stone-200 bg-white shadow-md">
+            <ul className="absolute z-10 mt-1 w-full border border-[#DDD8CF] bg-white shadow-sm">
               {results.map((yarn) => (
                 <li key={yarn.id}>
                   <button
                     type="button"
                     onClick={() => selectYarn(yarn)}
-                    className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-stone-50"
+                    className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-[#FAF7F2]"
                   >
-                    <span className="font-medium text-stone-800">
+                    <span className="font-medium text-[#1A1814]">
                       {yarn.name}
                     </span>
-                    <span className="ml-2 text-stone-500">
+                    <span className="ml-2 text-[10px] uppercase tracking-[0.1em] text-[#7A7068]">
                       {yarn.brand} · {yarn.weight}
                     </span>
                   </button>
@@ -180,28 +180,28 @@ export default function YarnSearch() {
           )}
 
           {dropdownOpen && results.length === 0 && !searching && (
-            <div className="absolute z-10 mt-1 w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-500 shadow-md">
+            <div className="absolute z-10 mt-1 w-full border border-[#DDD8CF] bg-white px-4 py-3 text-sm text-[#7A7068] shadow-sm">
               No yarns found — fill in details below manually.
             </div>
           )}
         </div>
 
         {searchError && (
-          <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-700">
+          <p className="text-[11px] text-red-500 mt-1">
             Yarn search is unavailable — fill in the details manually below.
           </p>
         )}
       </div>
 
       {/* Manual entry */}
-      <div className="space-y-6 rounded-2xl border border-stone-100 bg-stone-50 p-5">
-        <p className="text-sm font-semibold uppercase tracking-wide text-stone-500">
+      <div className="border-t border-[#DDD8CF] pt-8 mt-4 space-y-6">
+        <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-[#7A7068] mb-6">
           Yarn details
         </p>
 
         {/* Weight toggle */}
         <div className="space-y-2">
-          <p className="text-sm font-medium text-stone-700">Weight</p>
+          <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-[#7A7068] mb-2">Weight</p>
           <div className="flex flex-wrap gap-2">
             {WEIGHT_OPTIONS.map((w) => (
               <button
@@ -210,10 +210,10 @@ export default function YarnSearch() {
                 onClick={() => setValue("weight", w)}
                 aria-pressed={weightValue === w}
                 className={[
-                  "rounded-lg border px-3 py-1.5 text-sm transition-all",
+                  "border px-4 py-2 text-sm transition-all",
                   weightValue === w
-                    ? "border-stone-800 bg-stone-800 text-white"
-                    : "border-stone-200 bg-white text-stone-700 hover:border-stone-400",
+                    ? "border-[#1A1814] bg-[#1A1814] text-white"
+                    : "border-[#DDD8CF] text-[#1A1814] hover:border-[#1A1814]",
                 ].join(" ")}
               >
                 {w}
@@ -226,30 +226,30 @@ export default function YarnSearch() {
             {...register("weight", { required: "Select a weight" })}
           />
           {errors.weight && (
-            <p className="text-xs text-red-500">{errors.weight.message}</p>
+            <p className="text-[11px] text-red-500 mt-1">{errors.weight.message}</p>
           )}
         </div>
 
         {/* Gauge */}
         <div className="space-y-1">
-          <label className="text-sm font-medium text-stone-700">
+          <label className="text-[10px] font-medium uppercase tracking-[0.18em] text-[#7A7068] mb-2 block">
             Gauge per 10 cm
           </label>
-          <div className="flex gap-3">
+          <div className="flex gap-6">
             <div className="flex-1 space-y-1">
               <input
                 id="gaugeStitches"
                 type="text"
                 inputMode="decimal"
                 placeholder="stitches (e.g. 22)"
-                className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-800 placeholder-stone-400 outline-none transition-all focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+                className="border-b border-[#DDD8CF] bg-transparent px-0 py-2.5 text-sm text-[#1A1814] placeholder-[#C8C2B8] outline-none focus:border-[#1A1814] w-full"
                 {...register("gaugeStitches", {
                   required: "Required",
                   pattern: { value: /^\d+(\.\d+)?$/, message: "Must be a number" },
                 })}
               />
               {errors.gaugeStitches && (
-                <p className="text-xs text-red-500">{errors.gaugeStitches.message}</p>
+                <p className="text-[11px] text-red-500 mt-1">{errors.gaugeStitches.message}</p>
               )}
             </div>
             <div className="flex-1 space-y-1">
@@ -258,14 +258,14 @@ export default function YarnSearch() {
                 type="text"
                 inputMode="decimal"
                 placeholder="rows (e.g. 30)"
-                className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-800 placeholder-stone-400 outline-none transition-all focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+                className="border-b border-[#DDD8CF] bg-transparent px-0 py-2.5 text-sm text-[#1A1814] placeholder-[#C8C2B8] outline-none focus:border-[#1A1814] w-full"
                 {...register("gaugeRows", {
                   required: "Required",
                   pattern: { value: /^\d+(\.\d+)?$/, message: "Must be a number" },
                 })}
               />
               {errors.gaugeRows && (
-                <p className="text-xs text-red-500">{errors.gaugeRows.message}</p>
+                <p className="text-[11px] text-red-500 mt-1">{errors.gaugeRows.message}</p>
               )}
             </div>
           </div>
@@ -275,7 +275,7 @@ export default function YarnSearch() {
         <div className="space-y-1">
           <label
             htmlFor="needleSize"
-            className="text-sm font-medium text-stone-700"
+            className="text-[10px] font-medium uppercase tracking-[0.18em] text-[#7A7068] mb-2 block"
           >
             Needle size (mm)
           </label>
@@ -284,7 +284,7 @@ export default function YarnSearch() {
             type="text"
             inputMode="decimal"
             placeholder="e.g. 4.5"
-            className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-800 placeholder-stone-400 outline-none transition-all focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+            className="border-b border-[#DDD8CF] bg-transparent px-0 py-2.5 text-sm text-[#1A1814] placeholder-[#C8C2B8] outline-none focus:border-[#1A1814] w-full"
             {...register("needleSize", {
               required: "Needle size is required",
               pattern: {
@@ -294,14 +294,14 @@ export default function YarnSearch() {
             })}
           />
           {errors.needleSize && (
-            <p className="text-xs text-red-500">{errors.needleSize.message}</p>
+            <p className="text-[11px] text-red-500 mt-1">{errors.needleSize.message}</p>
           )}
         </div>
       </div>
 
       <button
         type="submit"
-        className="w-full rounded-xl bg-stone-900 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-stone-700 active:scale-95"
+        className="w-full bg-[#1A1814] text-white px-8 py-3.5 text-xs font-medium uppercase tracking-[0.1em] transition-opacity hover:opacity-70 mt-6"
       >
         Continue to pattern generation
       </button>
