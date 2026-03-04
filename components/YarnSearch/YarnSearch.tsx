@@ -68,9 +68,14 @@ export default function YarnSearch() {
           { signal: abortRef.current.signal }
         );
         if (res.ok) {
-          const data: YarnResult[] = await res.json();
-          setResults(data);
-          setDropdownOpen(true);
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            setResults(data as YarnResult[]);
+            setDropdownOpen(true);
+          } else {
+            setSearchError(true);
+            setDropdownOpen(false);
+          }
         } else {
           setSearchError(true);
           setDropdownOpen(false);
