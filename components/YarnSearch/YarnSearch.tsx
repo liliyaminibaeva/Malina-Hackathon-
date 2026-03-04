@@ -54,6 +54,7 @@ export default function YarnSearch() {
       setResults([]);
       setDropdownOpen(false);
       setSearchError(false);
+      setSearching(false);
       return;
     }
     debounceRef.current = setTimeout(async () => {
@@ -72,10 +73,12 @@ export default function YarnSearch() {
           setDropdownOpen(true);
         } else {
           setSearchError(true);
+          setDropdownOpen(false);
         }
         setSearching(false);
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") {
+          setSearching(false);
           return;
         }
         setSearchError(true);
