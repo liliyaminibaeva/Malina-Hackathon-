@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import claude from "@/lib/claude";
+import { PHOTO_ANALYSIS_PROMPT } from "@/lib/prompts";
 
 export async function POST(request: NextRequest) {
   let formData: FormData;
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
             },
             {
               type: "text",
-              text: 'Analyze this knitting photo and return JSON with style fields: construction, neckline, sleeveLength, fit, hem. Return only valid JSON, no additional text.',
+              text: PHOTO_ANALYSIS_PROMPT,
             },
           ],
         },
