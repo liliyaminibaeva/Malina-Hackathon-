@@ -53,13 +53,13 @@ Steps:
 - Create: `components/ItemPicker/index.ts`
 
 Steps:
-- [ ] Build `ItemPicker` component with two sections: **Tops** and **Accessories**
-- [ ] Tops: sweater, slipover, t-shirt (clickable cards with icon/label)
-- [ ] Accessories: beanie, gloves, scarf, minnens, hood (clickable cards)
-- [ ] Bottoms section: visible but grayed out with "Coming soon" badge
-- [ ] On item select: save to context, navigate to `/configure`
-- [ ] `app/page.tsx`: render `ItemPicker` with page heading
-- [ ] Run `npm run build`
+- [x] Build `ItemPicker` component with two sections: **Tops** and **Accessories**
+- [x] Tops: sweater, slipover, t-shirt (clickable cards with icon/label)
+- [x] Accessories: beanie, gloves, scarf, minnens, hood (clickable cards)
+- [x] Bottoms section: visible but grayed out with "Coming soon" badge
+- [x] On item select: save to context, navigate to `/configure`
+- [x] `app/page.tsx`: render `ItemPicker` with page heading
+- [x] Run `npm run build`
 
 ### Task 3: Step 2 — Config forms for all item types
 
