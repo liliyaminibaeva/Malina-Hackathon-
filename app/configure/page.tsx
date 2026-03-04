@@ -151,22 +151,14 @@ export default function ConfigurePage() {
                 <RavelryPlaceholder />
               </div>
 
-              {/* Right column: pre-filled config form */}
+              {/* Right column: config form (pre-filled once photo is analysed) */}
               <div>
-                {photoDefaults ? (
-                  <div className="space-y-3">
-                    <p className="text-sm font-medium text-stone-600">
-                      Style options detected from your photo — adjust as needed:
-                    </p>
-                    <ConfigForm key={JSON.stringify(photoDefaults)} defaultValues={photoDefaults} />
-                  </div>
-                ) : (
-                  <div className="flex h-full min-h-[200px] items-center justify-center rounded-xl border border-dashed border-stone-200 bg-stone-50 p-8 text-center">
-                    <p className="text-sm text-stone-400">
-                      Upload a photo and we&apos;ll pre-fill your style options here.
-                    </p>
-                  </div>
+                {photoDefaults && (
+                  <p className="mb-3 text-sm font-medium text-stone-600">
+                    Style options detected from your photo — adjust as needed:
+                  </p>
                 )}
+                <ConfigForm key={JSON.stringify(photoDefaults)} defaultValues={photoDefaults} />
               </div>
             </div>
           )}
