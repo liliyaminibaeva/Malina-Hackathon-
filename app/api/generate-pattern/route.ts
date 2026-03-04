@@ -3,7 +3,7 @@ import claude from "@/lib/claude";
 import { SYSTEM_PROMPT, getPatternPrompt } from "@/lib/prompts";
 
 export async function POST(request: NextRequest) {
-  let body: { itemType?: unknown; styleConfig?: unknown; yarnConfig?: unknown; email?: unknown };
+  let body: { itemType?: unknown; styleConfig?: unknown; yarnConfig?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -15,6 +15,13 @@ export async function POST(request: NextRequest) {
   if (!itemType || typeof itemType !== "string" || itemType.trim() === "") {
     return NextResponse.json(
       { error: "Missing required field: itemType" },
+      { status: 400 }
+    );
+  }
+
+  if (itemType.length > 100) {
+    return NextResponse.json(
+      { error: "itemType must be 100 characters or fewer" },
       { status: 400 }
     );
   }

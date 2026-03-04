@@ -21,7 +21,9 @@ export async function POST(request: NextRequest) {
     const escaped = pattern
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
 
     const html = `<!DOCTYPE html>
 <html lang="en">

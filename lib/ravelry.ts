@@ -30,9 +30,6 @@ export async function ravelryFetch(
   path: string,
   params?: Record<string, string>
 ): Promise<unknown> {
-  const username = RAVELRY_USERNAME;
-  const password = RAVELRY_PASSWORD;
-
   const url = new URL(`${RAVELRY_BASE}${path}`);
   if (params) {
     for (const [key, value] of Object.entries(params)) {
@@ -40,7 +37,7 @@ export async function ravelryFetch(
     }
   }
 
-  const credentials = Buffer.from(`${username}:${password}`).toString(
+  const credentials = Buffer.from(`${RAVELRY_USERNAME}:${RAVELRY_PASSWORD}`).toString(
     "base64"
   );
 
@@ -57,6 +54,6 @@ export async function ravelryFetch(
   try {
     return await response.json();
   } catch {
-    throw new RavelryError(response.status, "Invalid JSON in response");
+    throw new Error("Ravelry API returned invalid JSON");
   }
 }
