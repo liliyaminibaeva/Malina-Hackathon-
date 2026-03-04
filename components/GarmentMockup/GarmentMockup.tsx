@@ -37,7 +37,7 @@ function SweaterMockup({ styleConfig, sleeveMode }: { styleConfig: StyleConfig; 
   // Sleeve y bottom
   let sleeveEndY = 185;
   if (sleeveLength === "3/4") sleeveEndY = 150;
-  else if (sleeveLength === "Short" || sleeveMode === "short") sleeveEndY = 115;
+  else if (sleeveLength === "Short" || effectiveSleeve === "short") sleeveEndY = 115;
 
   // Build SVG paths
   const paths: React.ReactNode[] = [];

@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
       construction: ["Top-down", "Bottom-up", "Seamless", "Seamed"],
       neckline: ["Crew neck", "V-neck", "Turtleneck", "Boat neck", "Scoop neck"],
       sleeveLength: ["Sleeveless", "Short", "3/4", "Long"],
-      fit: ["Fitted", "Relaxed", "Oversized"],
+      fit: ["Fitted", "Relaxed", "Oversized", "Classic"],
       hem: ["Straight", "Curved", "Ribbed"],
     };
     const sanitized: Record<string, string> = {};

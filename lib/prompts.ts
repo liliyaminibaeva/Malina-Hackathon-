@@ -67,7 +67,7 @@ Attributes to detect:
 construction: The construction method. Allowed values: "Top-down", "Bottom-up", "Seamless", "Seamed"
 neckline: The shape of the neckline. Allowed values: "Crew neck", "V-neck", "Turtleneck", "Boat neck", "Scoop neck"
 sleeveLength: The length of the sleeves. Allowed values: "Sleeveless", "Short", "3/4", "Long"
-fit: How the garment fits the body. Allowed values: "Fitted", "Relaxed", "Oversized"
+fit: How the garment fits the body. Allowed values: "Fitted", "Relaxed", "Oversized", "Classic"
 hem: The shape or style of the hem. Allowed values: "Straight", "Curved", "Ribbed"
 
 Rules:
