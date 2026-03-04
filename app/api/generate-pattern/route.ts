@@ -55,6 +55,14 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (styleConfig !== undefined && styleConfig !== null &&
+      (typeof styleConfig !== "object" || Array.isArray(styleConfig))) {
+    return NextResponse.json(
+      { error: "styleConfig must be an object" },
+      { status: 400 }
+    );
+  }
+
   if (JSON.stringify(styleConfig ?? null).length > 2048) {
     return NextResponse.json(
       { error: "styleConfig is too large" },

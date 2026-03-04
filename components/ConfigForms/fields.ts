@@ -124,7 +124,7 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
   ],
   scarf: [
     {
-      name: "size",
+      name: "length",
       label: "Length",
       options: ["150 cm", "180 cm", "210 cm", "250 cm"],
     },

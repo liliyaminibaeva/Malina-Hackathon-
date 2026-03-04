@@ -155,7 +155,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ fields });
+    const ALLOWED_FIELDS: Record<string, string[]> = {
+      construction: ["Top-down", "Bottom-up", "Seamless", "Seamed"],
+      neckline: ["Crew neck", "V-neck", "Turtleneck", "Boat neck", "Scoop neck"],
+      sleeveLength: ["Sleeveless", "Short", "3/4", "Long"],
+      fit: ["Fitted", "Relaxed", "Oversized"],
+      hem: ["Straight", "Curved", "Ribbed"],
+    };
+    const sanitized: Record<string, string> = {};
+    for (const [key, value] of Object.entries(fields as Record<string, unknown>)) {
+      if (key in ALLOWED_FIELDS && typeof value === "string" && ALLOWED_FIELDS[key].includes(value)) {
+        sanitized[key] = value;
+      }
+    }
+
+    return NextResponse.json({ fields: sanitized });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
