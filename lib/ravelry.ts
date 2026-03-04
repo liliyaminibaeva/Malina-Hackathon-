@@ -28,12 +28,8 @@ export async function ravelryFetch(
   path: string,
   params?: Record<string, string>
 ): Promise<unknown> {
-  const username = process.env.RAVELRY_USERNAME;
-  const password = process.env.RAVELRY_PASSWORD;
-
-  if (!username || !password) {
-    throw new Error("Ravelry credentials not configured");
-  }
+  const username = process.env.RAVELRY_USERNAME!;
+  const password = process.env.RAVELRY_PASSWORD!;
 
   const url = new URL(`${RAVELRY_BASE}${path}`);
   if (params) {

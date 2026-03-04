@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
 
   const { itemType, styleConfig, yarnConfig } = body;
 
-  if (!itemType || typeof itemType !== "string") {
+  if (!itemType || typeof itemType !== "string" || itemType.trim() === "") {
     return NextResponse.json(
       { error: "Missing required field: itemType" },
       { status: 400 }
