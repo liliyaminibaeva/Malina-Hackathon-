@@ -34,7 +34,7 @@ export default function ConfigurePage() {
     beanie: "Beanie",
     gloves: "Gloves",
     scarf: "Scarf",
-    minnens: "Mittens",
+    mittens: "Mittens",
     hood: "Hood",
   };
   const itemLabel = ITEM_DISPLAY_NAMES[itemType] ?? itemType.charAt(0).toUpperCase() + itemType.slice(1);

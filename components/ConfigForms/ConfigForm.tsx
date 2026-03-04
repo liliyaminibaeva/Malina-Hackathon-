@@ -64,8 +64,11 @@ export default function ConfigForm({ defaultValues, onValuesChange }: ConfigForm
   const values = watch();
 
   useEffect(() => {
-    onValuesChange?.(values);
-  }, [values, onValuesChange]);
+    const { unsubscribe } = watch((newValues) => {
+      onValuesChange?.(newValues as StyleConfig);
+    });
+    return unsubscribe;
+  }, [watch, onValuesChange]);
 
   function onSubmit(data: StyleConfig) {
     const filtered = Object.fromEntries(

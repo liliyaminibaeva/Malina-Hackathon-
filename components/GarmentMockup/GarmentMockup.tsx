@@ -170,9 +170,11 @@ function BeanieMockup({ styleConfig }: { styleConfig: StyleConfig }) {
   // Brim
   const hasBrim = brim !== "No brim" && brim !== "";
   const brimH = brim === "Wide ribbed" ? 28 : brim === "Folded" ? 22 : 16;
-  paths.push(
-    <rect key="brimbox" x={38} y={160} width={124} height={brimH > 0 ? brimH : 16} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />
-  );
+  if (hasBrim) {
+    paths.push(
+      <rect key="brimbox" x={38} y={160} width={124} height={brimH} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />
+    );
+  }
 
   if (hasBrim && (brim === "Short ribbed" || brim === "Wide ribbed")) {
     const ribY1 = 160 + Math.round(brimH / 3);
@@ -300,7 +302,7 @@ export default function GarmentMockup({ itemType, styleConfig, className }: Garm
         return <ScarfMockup styleConfig={styleConfig} />;
       case "gloves":
         return <GlovesMockup />;
-      case "minnens":
+      case "mittens":
         return <MittensMockup />;
       case "hood":
         return <HoodMockup styleConfig={styleConfig} />;

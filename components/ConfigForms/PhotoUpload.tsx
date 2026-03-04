@@ -62,9 +62,9 @@ export default function PhotoUpload({ onAnalysisComplete, onReset }: PhotoUpload
         throw new Error(`Server returned ${res.status}`);
       }
 
-      const data: StyleConfig = await res.json();
+      const data = await res.json();
       setUploadState("done");
-      onAnalysisComplete(data);
+      onAnalysisComplete(data.fields ?? data);
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") return;
       setErrorMsg(

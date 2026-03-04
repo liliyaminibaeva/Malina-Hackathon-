@@ -17,7 +17,7 @@ export type ItemType =
   | "beanie"
   | "gloves"
   | "scarf"
-  | "minnens"
+  | "mittens"
   | "hood";
 
 // Placeholder exports for Dev 2 — will be filled in subsequent tasks
@@ -93,7 +93,7 @@ const ITEM_LABELS: Record<ItemType, string> = {
   beanie: "beanie hat",
   gloves: "pair of gloves",
   scarf: "scarf",
-  minnens: "pair of mittens (minnens)",
+  mittens: "pair of mittens",
   hood: "hood",
 };
 
@@ -144,7 +144,7 @@ const CONSTRUCTION_NOTES: Record<ItemType, string> = {
 - Include total length in cm and stitch count (does not need to be size-graded, but if width varies note it)
 - Bind off loosely, block to measurements`,
 
-  minnens: `Construction notes specific to these mittens:
+  mittens: `Construction notes specific to these mittens:
 - Worked in the round from the cuff upward
 - Cuff: ribbed (1x1 or 2x2), typically 6–10 cm
 - Thumb opening: either a thumb hole worked with waste yarn (afterthought thumb) or a thumb gusset with increases

@@ -30,7 +30,7 @@ const ACCESSORIES: Item[] = [
   { id: "beanie", label: "Beanie", Icon: BeanieIcon },
   { id: "gloves", label: "Gloves", Icon: GlovesIcon },
   { id: "scarf", label: "Scarf", Icon: ScarfIcon },
-  { id: "minnens", label: "Mittens", Icon: MittensIcon },
+  { id: "mittens", label: "Mittens", Icon: MittensIcon },
   { id: "hood", label: "Hood", Icon: HoodIcon },
 ];
 
