@@ -156,7 +156,6 @@ export async function POST(request: NextRequest) {
     }
 
     const ALLOWED_FIELDS: Record<string, string[]> = {
-      construction: ["Top-down", "Bottom-up", "Seamless", "Seamed"],
       neckline: ["Crew neck", "V-neck", "Turtleneck", "Boat neck", "Scoop neck"],
       sleeveLength: ["Sleeveless", "Short", "3/4", "Long"],
       fit: ["Fitted", "Relaxed", "Oversized", "Classic"],
