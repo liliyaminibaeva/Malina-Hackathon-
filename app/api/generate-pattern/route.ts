@@ -55,15 +55,35 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (styleConfig !== undefined && styleConfig !== null &&
-      (typeof styleConfig !== "object" || Array.isArray(styleConfig))) {
+  if (!styleConfig || typeof styleConfig !== "object" || Array.isArray(styleConfig)) {
     return NextResponse.json(
-      { error: "styleConfig must be an object" },
+      { error: "Missing required field: styleConfig" },
       { status: 400 }
     );
   }
 
-  if (JSON.stringify(styleConfig ?? null).length > 2048) {
+  for (const [k, v] of Object.entries(styleConfig as Record<string, unknown>)) {
+    if (typeof k !== "string" || typeof v !== "string") {
+      return NextResponse.json(
+        { error: "styleConfig values must be strings" },
+        { status: 400 }
+      );
+    }
+    if (k.length > 50 || v.length > 100) {
+      return NextResponse.json(
+        { error: "styleConfig contains oversized fields" },
+        { status: 400 }
+      );
+    }
+    if (/[\n\r]/.test(v)) {
+      return NextResponse.json(
+        { error: "styleConfig values must not contain newlines" },
+        { status: 400 }
+      );
+    }
+  }
+
+  if (JSON.stringify(styleConfig).length > 2048) {
     return NextResponse.json(
       { error: "styleConfig is too large" },
       { status: 400 }
@@ -77,13 +97,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const userPrompt = getPatternPrompt(
-    itemType as import("@/lib/prompts").ItemType,
-    styleConfig as import("@/lib/prompts").StyleConfig,
-    yarnConfig as import("@/lib/prompts").YarnConfig
-  );
-
   try {
+    const userPrompt = getPatternPrompt(
+      itemType as import("@/lib/prompts").ItemType,
+      styleConfig as import("@/lib/prompts").StyleConfig,
+      yarnConfig as import("@/lib/prompts").YarnConfig
+    );
+
     const response = await claude.messages.create({
       model: "claude-opus-4-6",
       max_tokens: 4096,
