@@ -85,8 +85,8 @@ Export one React component per item that returns an SVG:
 
 All icons: `width={48} height={56}` default props, accept optional `className` prop.
 
-- [ ] Create `components/ItemIcons/ItemIcons.tsx` with all 8 icon components
-- [ ] Create `components/ItemIcons/index.ts` barrel export
+- [x] Create `components/ItemIcons/ItemIcons.tsx` with all 8 icon components
+- [x] Create `components/ItemIcons/index.ts` barrel export
 
 ### Task 3: Redesign homepage and ItemPicker
 
