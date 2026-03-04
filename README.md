@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Malina — Knitting Pattern Generator
+
+A 4-step web app that generates custom knitting patterns. Users pick an item type, configure style options (manually or via photo upload), specify their yarn, and receive a generated pattern they can print or save as a PDF.
+
+## Application Flow
+
+1. `/` — Pick an item type (sweater, slipover, t-shirt, beanie, gloves, scarf, mittens, hood)
+2. `/configure` — Configure style options via manual toggle-button form or photo upload
+3. `/yarn` — Search for yarn by name or enter weight, gauge, and needle size manually
+4. `/generate` — Enter email, generate the pattern, preview and print/save as PDF
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build & Lint
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build   # TypeScript compile + Next.js build
+npm run lint    # ESLint
+```
 
-## Learn More
+## API Routes (required by backend — Dev 2)
 
-To learn more about Next.js, take a look at the following resources:
+| Method | Path | Purpose |
+|--------|------|---------|
+| POST | /api/analyze-photo | Accepts multipart image, returns StyleConfig JSON |
+| GET | /api/search-yarn | Accepts ?q= query, returns array of yarn results |
+| POST | /api/generate-pattern | Accepts full config object, returns pattern text/sections |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Photo upload accepts JPEG and PNG images up to 10 MB
+- The "Bottoms" category (socks, pants, shorts) is displayed but not yet supported
+- Cross-step state is held in a React context and resets on full page reload

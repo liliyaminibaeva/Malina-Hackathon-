@@ -84,7 +84,7 @@ export default function PatternPreview({ pattern }: PatternPreviewProps) {
       {sections.length > 0 ? (
         <div className="space-y-8 print:space-y-6">
           {sections.map((section, i) => (
-            <section key={i}>
+            <section key={`${section.title}-${i}`}>
               <h2 className="mb-3 text-sm font-semibold uppercase tracking-widest text-stone-500 print:text-black">
                 {section.title}
               </h2>

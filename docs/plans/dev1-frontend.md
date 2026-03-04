@@ -2,6 +2,8 @@
 
 ## Overview
 
+Status: Complete
+
 Build the full user-facing interface for Malina: a 4-step knitting pattern generator. The UI guides users from picking an item type, through configuration (photo upload or manual form), yarn selection, and finally pattern generation and preview. No login, no accounts. Clean Scandinavian aesthetic inspired by PetiteKnit.
 
 Stack: Next.js 14 App Router, TypeScript, Tailwind CSS, react-hook-form.
@@ -152,6 +154,6 @@ Steps:
 
 ## Post-Completion
 
-- Test full flow manually: pick item → configure → yarn → generate
-- Verify print layout looks correct in browser
-- Test photo upload with a real knitting photo
+- [x] Test full flow manually: pick item → configure → yarn → generate
+- [x] Verify print layout looks correct in browser
+- [ ] Test photo upload with a real knitting photo (requires backend API)

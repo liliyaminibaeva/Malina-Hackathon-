@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { StyleConfig } from "@/lib/store";
 
 interface PhotoUploadProps {
@@ -19,6 +19,11 @@ export default function PhotoUpload({ onAnalysisComplete }: PhotoUploadProps) {
   function handleFile(file: File) {
     if (!file.type.startsWith("image/")) {
       setErrorMsg("Please upload an image file (JPEG, PNG, etc.).");
+      setUploadState("error");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setErrorMsg("File too large — max 10 MB.");
       setUploadState("error");
       return;
     }
@@ -60,16 +65,12 @@ export default function PhotoUpload({ onAnalysisComplete }: PhotoUploadProps) {
     }
   }
 
-  const onDrop = useCallback(
-    (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      setIsDragging(false);
-      const file = e.dataTransfer.files[0];
-      if (file) handleFile(file);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  function onDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(file);
+  }
 
   function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];

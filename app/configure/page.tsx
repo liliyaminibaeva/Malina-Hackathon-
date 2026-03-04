@@ -68,10 +68,6 @@ export default function ConfigurePage() {
 
   const itemLabel = itemType.charAt(0).toUpperCase() + itemType.slice(1);
 
-  function handleAnalysisComplete(config: StyleConfig) {
-    setPhotoDefaults(config);
-  }
-
   return (
     <main className="mx-auto min-h-screen max-w-5xl px-6 py-12">
       <StepIndicator current={2} />
@@ -152,7 +148,7 @@ export default function ConfigurePage() {
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Left column: photo upload + Ravelry placeholder */}
               <div className="space-y-6">
-                <PhotoUpload onAnalysisComplete={handleAnalysisComplete} />
+                <PhotoUpload onAnalysisComplete={setPhotoDefaults} />
                 <RavelryPlaceholder />
               </div>
 
@@ -163,7 +159,7 @@ export default function ConfigurePage() {
                     <p className="text-sm font-medium text-stone-600">
                       Style options detected from your photo — adjust as needed:
                     </p>
-                    <ConfigForm defaultValues={photoDefaults} />
+                    <ConfigForm key={JSON.stringify(photoDefaults)} defaultValues={photoDefaults} />
                   </div>
                 ) : (
                   <div className="flex h-full min-h-[200px] items-center justify-center rounded-xl border border-dashed border-stone-200 bg-stone-50 p-8 text-center">

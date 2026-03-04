@@ -32,6 +32,7 @@ export default function YarnSearch() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedYarn, setSelectedYarn] = useState<YarnResult | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -56,11 +57,14 @@ export default function YarnSearch() {
       return;
     }
     debounceRef.current = setTimeout(async () => {
+      abortRef.current?.abort();
+      abortRef.current = new AbortController();
       setSearching(true);
       setSearchError(false);
       try {
         const res = await fetch(
-          `/api/search-yarn?q=${encodeURIComponent(query.trim())}`
+          `/api/search-yarn?q=${encodeURIComponent(query.trim())}`,
+          { signal: abortRef.current.signal }
         );
         if (res.ok) {
           const data: YarnResult[] = await res.json();
@@ -69,7 +73,8 @@ export default function YarnSearch() {
         } else {
           setSearchError(true);
         }
-      } catch {
+      } catch (err) {
+        if (err instanceof Error && err.name === "AbortError") return;
         setSearchError(true);
       } finally {
         setSearching(false);
@@ -77,6 +82,7 @@ export default function YarnSearch() {
     }, 300);
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
+      abortRef.current?.abort();
     };
   }, [query]);
 
