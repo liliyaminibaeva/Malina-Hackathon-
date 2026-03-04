@@ -38,12 +38,12 @@ Stack: Next.js 14 App Router, TypeScript, Tailwind CSS, react-hook-form.
 - Create: `lib/store.tsx` (React context for shared form state)
 
 Steps:
-- [ ] Set up global font (Inter or similar clean sans-serif via next/font)
-- [ ] Add base Tailwind styles: neutral background, clean typography
-- [ ] Create `PatternFormContext` in `lib/store.tsx` with fields: `itemType`, `styleConfig`, `yarnConfig`, `email`
-- [ ] Export `usePatternForm()` hook for consuming context in pages
-- [ ] Wrap `app/layout.tsx` with the context provider
-- [ ] Run `npm run build` — no TypeScript errors
+- [x] Set up global font (Inter or similar clean sans-serif via next/font)
+- [x] Add base Tailwind styles: neutral background, clean typography
+- [x] Create `PatternFormContext` in `lib/store.tsx` with fields: `itemType`, `styleConfig`, `yarnConfig`, `email`
+- [x] Export `usePatternForm()` hook for consuming context in pages
+- [x] Wrap `app/layout.tsx` with the context provider
+- [x] Run `npm run build` — no TypeScript errors
 
 ### Task 2: Step 1 — Item type picker
 

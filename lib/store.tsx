@@ -1,0 +1,82 @@
+"use client";
+
+import { createContext, useContext, useState } from "react";
+
+export type ItemType =
+  | "sweater"
+  | "slipover"
+  | "t-shirt"
+  | "beanie"
+  | "gloves"
+  | "scarf"
+  | "minnens"
+  | "hood"
+  | null;
+
+export type StyleConfig = Record<string, string>;
+
+export interface YarnConfig {
+  name?: string;
+  brand?: string;
+  weight: string;
+  gauge: string;
+  needleSize: string;
+}
+
+interface PatternFormState {
+  itemType: ItemType;
+  styleConfig: StyleConfig | null;
+  yarnConfig: YarnConfig | null;
+  email: string;
+}
+
+interface PatternFormContextValue extends PatternFormState {
+  setItemType: (itemType: ItemType) => void;
+  setStyleConfig: (config: StyleConfig) => void;
+  setYarnConfig: (config: YarnConfig) => void;
+  setEmail: (email: string) => void;
+  reset: () => void;
+}
+
+const defaultState: PatternFormState = {
+  itemType: null,
+  styleConfig: null,
+  yarnConfig: null,
+  email: "",
+};
+
+const PatternFormContext = createContext<PatternFormContextValue | null>(null);
+
+export function PatternFormProvider({ children }: { children: React.ReactNode }) {
+  const [state, setState] = useState<PatternFormState>(defaultState);
+
+  const setItemType = (itemType: ItemType) =>
+    setState((prev) => ({ ...prev, itemType }));
+
+  const setStyleConfig = (styleConfig: StyleConfig) =>
+    setState((prev) => ({ ...prev, styleConfig }));
+
+  const setYarnConfig = (yarnConfig: YarnConfig) =>
+    setState((prev) => ({ ...prev, yarnConfig }));
+
+  const setEmail = (email: string) =>
+    setState((prev) => ({ ...prev, email }));
+
+  const reset = () => setState(defaultState);
+
+  return (
+    <PatternFormContext.Provider
+      value={{ ...state, setItemType, setStyleConfig, setYarnConfig, setEmail, reset }}
+    >
+      {children}
+    </PatternFormContext.Provider>
+  );
+}
+
+export function usePatternForm(): PatternFormContextValue {
+  const ctx = useContext(PatternFormContext);
+  if (!ctx) {
+    throw new Error("usePatternForm must be used within a PatternFormProvider");
+  }
+  return ctx;
+}
