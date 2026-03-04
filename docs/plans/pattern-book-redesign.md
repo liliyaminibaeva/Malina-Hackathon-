@@ -195,8 +195,8 @@ For item types without detailed parametric options, show a centered static schem
 
 Export default `GarmentMockup` component. When `styleConfig` is empty (no selections yet), show the base shape with a subtle dashed outline.
 
-- [ ] Create `components/GarmentMockup/GarmentMockup.tsx` with all schematic logic
-- [ ] Create `components/GarmentMockup/index.ts` barrel export
+- [x] Create `components/GarmentMockup/GarmentMockup.tsx` with all schematic logic
+- [x] Create `components/GarmentMockup/index.ts` barrel export
 
 ### Task 6: Redesign Configure page with live mockup
 
