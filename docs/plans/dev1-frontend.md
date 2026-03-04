@@ -93,13 +93,13 @@ Steps:
 - Modify: `app/configure/page.tsx`
 
 Steps:
-- [ ] Build `PhotoUpload` component: drag-and-drop area + click to browse, shows image preview after selection
-- [ ] On upload: POST image to `/api/analyze-photo`, show loading spinner
-- [ ] On response: pre-fill `ConfigForm` with returned style fields
-- [ ] Show Ravelry placeholder area (static UI, not wired up): card with "Similar patterns on Ravelry" heading and placeholder image grid
-- [ ] Layout: photo upload + Ravelry placeholder on left, pre-filled config form on right (or stacked on mobile)
-- [ ] Handle error state (API unavailable, bad image)
-- [ ] Run `npm run build`
+- [x] Build `PhotoUpload` component: drag-and-drop area + click to browse, shows image preview after selection
+- [x] On upload: POST image to `/api/analyze-photo`, show loading spinner
+- [x] On response: pre-fill `ConfigForm` with returned style fields
+- [x] Show Ravelry placeholder area (static UI, not wired up): card with "Similar patterns on Ravelry" heading and placeholder image grid
+- [x] Layout: photo upload + Ravelry placeholder on left, pre-filled config form on right (or stacked on mobile)
+- [x] Handle error state (API unavailable, bad image)
+- [x] Run `npm run build`
 
 ### Task 5: Step 3 — Yarn selection
 
