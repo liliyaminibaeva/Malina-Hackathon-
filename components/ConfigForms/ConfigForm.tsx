@@ -57,18 +57,19 @@ export default function ConfigForm({ defaultValues, onValuesChange }: ConfigForm
 
   const fields = itemType ? ITEM_FIELDS[itemType as Exclude<ItemType, null>] : [];
 
-  const { handleSubmit, watch, setValue } = useForm<StyleConfig>({
+  const { handleSubmit, watch, setValue, getValues } = useForm<StyleConfig>({
     defaultValues: defaultValues ?? {},
   });
 
   const values = watch();
 
   useEffect(() => {
+    onValuesChange?.(getValues() as StyleConfig);
     const { unsubscribe } = watch((newValues) => {
       onValuesChange?.(newValues as StyleConfig);
     });
     return unsubscribe;
-  }, [watch, onValuesChange]);
+  }, [watch, onValuesChange, getValues]);
 
   function onSubmit(data: StyleConfig) {
     const filtered = Object.fromEntries(
