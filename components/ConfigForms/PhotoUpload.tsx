@@ -30,6 +30,7 @@ export default function PhotoUpload({ onAnalysisComplete }: PhotoUploadProps) {
 
     const reader = new FileReader();
     reader.onload = (e) => setPreview(e.target?.result as string);
+    reader.onerror = () => setPreview(null);
     reader.readAsDataURL(file);
 
     uploadFile(file);

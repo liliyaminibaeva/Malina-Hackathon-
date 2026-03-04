@@ -3,19 +3,27 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { usePatternForm } from "@/lib/store";
 import { PatternPreview } from "@/components/PatternPreview";
 import { StepIndicator } from "@/components/StepIndicator";
 
 type PatternResult = { sections?: { title: string; content: string }[]; raw?: string } | string;
+type EmailFormValues = { email: string };
 
 export default function GeneratePage() {
   const router = useRouter();
-  const { itemType, styleConfig, yarnConfig, email, setEmail } = usePatternForm();
+  const { itemType, styleConfig, yarnConfig, setEmail } = usePatternForm();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pattern, setPattern] = useState<PatternResult | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EmailFormValues>();
 
   useEffect(() => {
     if (!yarnConfig) {
@@ -25,28 +33,28 @@ export default function GeneratePage() {
 
   if (!yarnConfig) return null;
 
-  async function handleGenerate(e: React.FormEvent) {
-    e.preventDefault();
+  async function onSubmit(data: EmailFormValues) {
+    setEmail(data.email);
     setError(null);
     setLoading(true);
     try {
       const res = await fetch("/api/generate-pattern", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ itemType, styleConfig, yarnConfig, email }),
+        body: JSON.stringify({ itemType, styleConfig, yarnConfig, email: data.email }),
       });
       if (!res.ok) {
         const msg = await res.text().catch(() => "");
         throw new Error(msg || `Server error ${res.status}`);
       }
-      const data = await res.json();
+      const result = await res.json();
       // Support { pattern: "..." }, { sections: [...] }, or raw string
-      if (typeof data === "string") {
-        setPattern(data);
-      } else if (data.pattern) {
-        setPattern(data.pattern);
+      if (typeof result === "string") {
+        setPattern(result);
+      } else if (result.pattern) {
+        setPattern(result.pattern);
       } else {
-        setPattern(data);
+        setPattern(result);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -57,7 +65,7 @@ export default function GeneratePage() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-12">
-      <StepIndicator current={4} />
+      {!pattern && <StepIndicator current={4} />}
 
       {!pattern ? (
         <>
@@ -78,7 +86,7 @@ export default function GeneratePage() {
             Enter your email to receive the pattern, then click generate.
           </p>
 
-          <form onSubmit={handleGenerate} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-1">
               <label
                 htmlFor="email"
@@ -89,12 +97,19 @@ export default function GeneratePage() {
               <input
                 id="email"
                 type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-800 placeholder-stone-400 outline-none transition-all focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Enter a valid email address",
+                  },
+                })}
               />
+              {errors.email && (
+                <p className="text-xs text-red-500">{errors.email.message}</p>
+              )}
             </div>
 
             {error && (

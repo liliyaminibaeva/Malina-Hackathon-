@@ -73,10 +73,13 @@ export default function YarnSearch() {
         } else {
           setSearchError(true);
         }
+        setSearching(false);
       } catch (err) {
-        if (err instanceof Error && err.name === "AbortError") return;
+        if (err instanceof Error && err.name === "AbortError") {
+          setSearching(false);
+          return;
+        }
         setSearchError(true);
-      } finally {
         setSearching(false);
       }
     }, 300);

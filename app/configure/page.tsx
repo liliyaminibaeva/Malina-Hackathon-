@@ -5,8 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePatternForm } from "@/lib/store";
 import type { StyleConfig } from "@/lib/store";
-import { ConfigForm } from "@/components/ConfigForms";
-import PhotoUpload from "@/components/ConfigForms/PhotoUpload";
+import { ConfigForm, PhotoUpload } from "@/components/ConfigForms";
 import { StepIndicator } from "@/components/StepIndicator";
 
 type Path = "manual" | "photo";

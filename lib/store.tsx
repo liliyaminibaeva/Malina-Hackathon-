@@ -51,7 +51,7 @@ export function PatternFormProvider({ children }: { children: React.ReactNode })
   const [state, setState] = useState<PatternFormState>(defaultState);
 
   const setItemType = (itemType: ItemType) =>
-    setState((prev) => ({ ...prev, itemType }));
+    setState((prev) => ({ ...prev, itemType, styleConfig: null, yarnConfig: null }));
 
   const setStyleConfig = (styleConfig: StyleConfig) =>
     setState((prev) => ({ ...prev, styleConfig }));
