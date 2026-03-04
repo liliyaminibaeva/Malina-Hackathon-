@@ -5,11 +5,12 @@ import type { StyleConfig } from "@/lib/store";
 
 interface PhotoUploadProps {
   onAnalysisComplete: (config: StyleConfig) => void;
+  onReset?: () => void;
 }
 
 type UploadState = "idle" | "loading" | "done" | "error";
 
-export default function PhotoUpload({ onAnalysisComplete }: PhotoUploadProps) {
+export default function PhotoUpload({ onAnalysisComplete, onReset }: PhotoUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploadState, setUploadState] = useState<UploadState>("idle");
@@ -171,6 +172,7 @@ export default function PhotoUpload({ onAnalysisComplete }: PhotoUploadProps) {
             setUploadState("idle");
             setErrorMsg("");
             if (inputRef.current) inputRef.current.value = "";
+            onReset?.();
           }}
           className="text-sm text-stone-500 underline hover:text-stone-800"
         >

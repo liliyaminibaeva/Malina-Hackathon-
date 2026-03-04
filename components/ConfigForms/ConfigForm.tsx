@@ -62,7 +62,10 @@ export default function ConfigForm({ defaultValues }: ConfigFormProps) {
   const values = watch();
 
   function onSubmit(data: StyleConfig) {
-    setStyleConfig(data);
+    const filtered = Object.fromEntries(
+      fields.map((f) => [f.name, data[f.name] ?? ""])
+    ) as StyleConfig;
+    setStyleConfig(filtered);
     router.push("/yarn");
   }
 

@@ -149,7 +149,7 @@ export default function ConfigurePage() {
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Left column: photo upload + Ravelry placeholder */}
               <div className="space-y-6">
-                <PhotoUpload onAnalysisComplete={setPhotoDefaults} />
+                <PhotoUpload onAnalysisComplete={setPhotoDefaults} onReset={() => setPhotoDefaults(undefined)} />
                 <RavelryPlaceholder />
               </div>
 
