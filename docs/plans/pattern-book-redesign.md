@@ -346,8 +346,8 @@ async function onGenerate() {
 
 Pattern display (when pattern is set): same `<PatternPreview>` but wrapped in the same page header layout. Remove `StepIndicator` when pattern is showing.
 
-- [ ] Remove email form from `app/generate/page.tsx`
-- [ ] Replace with direct generate button and `onGenerate` function
+- [x] Remove email form from `app/generate/page.tsx`
+- [x] Replace with direct generate button and `onGenerate` function
 
 ### Task 8: Redesign Yarn page and YarnSearch
 
