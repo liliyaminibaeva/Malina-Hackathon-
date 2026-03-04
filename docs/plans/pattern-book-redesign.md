@@ -117,8 +117,8 @@ All icons: `width={48} height={56}` default props, accept optional `className` p
 - Coming-soon items: same row layout but `opacity-40 cursor-not-allowed`, label + "Coming soon" badge `text-[9px] uppercase tracking-[0.15em] text-[#7A7068]`
 - No outer card/box — just the list directly
 
-- [ ] Update `app/page.tsx` with pattern book header and serif h1
-- [ ] Update `components/ItemPicker/ItemPicker.tsx` with icon rows and new section labels
+- [x] Update `app/page.tsx` with pattern book header and serif h1
+- [x] Update `components/ItemPicker/ItemPicker.tsx` with icon rows and new section labels
 
 ### Task 4: Add size field to all item types
 

@@ -3,40 +3,38 @@
 import { useRouter } from "next/navigation";
 import { usePatternForm } from "@/lib/store";
 import type { ItemType } from "@/lib/store";
+import {
+  SweaterIcon,
+  SlipoverIcon,
+  TshirtIcon,
+  BeanieIcon,
+  GlovesIcon,
+  ScarfIcon,
+  MittensIcon,
+  HoodIcon,
+} from "@/components/ItemIcons";
 
 interface Item {
   id: ItemType;
   label: string;
+  Icon: React.ComponentType<{ width?: number; height?: number; className?: string }>;
 }
 
 const TOPS: Item[] = [
-  { id: "sweater", label: "Sweater" },
-  { id: "slipover", label: "Slipover" },
-  { id: "t-shirt", label: "T-shirt" },
+  { id: "sweater", label: "Sweater", Icon: SweaterIcon },
+  { id: "slipover", label: "Slipover", Icon: SlipoverIcon },
+  { id: "t-shirt", label: "T-shirt", Icon: TshirtIcon },
 ];
 
 const ACCESSORIES: Item[] = [
-  { id: "beanie", label: "Beanie" },
-  { id: "gloves", label: "Gloves" },
-  { id: "scarf", label: "Scarf" },
-  { id: "minnens", label: "Mittens" },
-  { id: "hood", label: "Hood" },
+  { id: "beanie", label: "Beanie", Icon: BeanieIcon },
+  { id: "gloves", label: "Gloves", Icon: GlovesIcon },
+  { id: "scarf", label: "Scarf", Icon: ScarfIcon },
+  { id: "minnens", label: "Mittens", Icon: MittensIcon },
+  { id: "hood", label: "Hood", Icon: HoodIcon },
 ];
 
 const BOTTOMS_COMING_SOON = ["Socks", "Pants", "Shorts"];
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section>
-      <p className="mb-3 text-[11px] font-medium uppercase tracking-[0.18em] text-stone-400">
-        {title}
-      </p>
-      <div className="divide-y divide-stone-100 border-t border-stone-100">
-        {children}
-      </div>
-    </section>
-  );
-}
 
 export default function ItemPicker() {
   const router = useRouter();
@@ -48,46 +46,50 @@ export default function ItemPicker() {
   }
 
   return (
-    <div className="space-y-10">
-      <Section title="Tops">
-        {TOPS.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => handleSelect(item.id)}
-            className="flex w-full items-center justify-between py-3.5 text-left text-base text-stone-800 transition-colors hover:text-stone-500"
-          >
-            {item.label}
-            <span className="text-stone-300">→</span>
-          </button>
-        ))}
-      </Section>
+    <div>
+      <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-[#7A7068] mt-8 mb-2">
+        Tops
+      </p>
+      {TOPS.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => handleSelect(item.id)}
+          className="flex w-full items-center gap-5 py-4 border-b border-[#DDD8CF] hover:bg-[#F3EEE5] transition-colors cursor-pointer text-left"
+        >
+          <item.Icon width={40} height={48} className="text-[#1A1814] opacity-80 flex-shrink-0" />
+          <span className="text-base text-[#1A1814] tracking-wide">{item.label}</span>
+          <span className="text-[#7A7068] ml-auto">›</span>
+        </button>
+      ))}
 
-      <Section title="Accessories">
-        {ACCESSORIES.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => handleSelect(item.id)}
-            className="flex w-full items-center justify-between py-3.5 text-left text-base text-stone-800 transition-colors hover:text-stone-500"
-          >
-            {item.label}
-            <span className="text-stone-300">→</span>
-          </button>
-        ))}
-      </Section>
+      <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-[#7A7068] mt-8 mb-2">
+        Accessories
+      </p>
+      {ACCESSORIES.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => handleSelect(item.id)}
+          className="flex w-full items-center gap-5 py-4 border-b border-[#DDD8CF] hover:bg-[#F3EEE5] transition-colors cursor-pointer text-left"
+        >
+          <item.Icon width={40} height={48} className="text-[#1A1814] opacity-80 flex-shrink-0" />
+          <span className="text-base text-[#1A1814] tracking-wide">{item.label}</span>
+          <span className="text-[#7A7068] ml-auto">›</span>
+        </button>
+      ))}
 
-      <Section title="Bottoms">
-        {BOTTOMS_COMING_SOON.map((label) => (
-          <div
-            key={label}
-            className="flex w-full items-center justify-between py-3.5 text-base text-stone-300"
-          >
-            {label}
-            <span className="text-[11px] uppercase tracking-widest text-stone-300">
-              Soon
-            </span>
-          </div>
-        ))}
-      </Section>
+      <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-[#7A7068] mt-8 mb-2">
+        Bottoms
+      </p>
+      {BOTTOMS_COMING_SOON.map((label) => (
+        <div
+          key={label}
+          className="flex w-full items-center gap-5 py-4 border-b border-[#DDD8CF] opacity-40 cursor-not-allowed"
+        >
+          <span className="w-10 h-12 flex-shrink-0" />
+          <span className="text-base text-[#1A1814] tracking-wide">{label}</span>
+          <span className="ml-auto text-[9px] uppercase tracking-[0.15em] text-[#7A7068]">Coming soon</span>
+        </div>
+      ))}
     </div>
   );
 }
