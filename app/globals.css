@@ -163,8 +163,15 @@ body {
     display: none !important;
   }
 
-  body > *:not(.pattern-preview-wrapper),
-  body > *:not(#__next),
+  body * {
+    visibility: hidden;
+  }
+
+  .pattern-preview-wrapper,
+  .pattern-preview-wrapper * {
+    visibility: visible;
+  }
+
   header,
   nav,
   footer,

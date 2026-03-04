@@ -63,7 +63,7 @@ export const PHOTO_ANALYSIS_PROMPT = `Analyze the knitting photo and identify th
 
 Attributes to detect:
 
-construction: How the garment is constructed. Allowed values: "raglan", "yoke", "dropped shoulder", "set-in sleeve", "seamless"
+construction: How the garment is constructed. Allowed values: "raglan", "yoke", "dropped shoulder"
 neckline: The shape of the neckline. Allowed values: "crew neck", "v-neck", "turtleneck", "boat neck", "scoop neck"
 sleeveLength: The length of the sleeves. Allowed values: "sleeveless", "short", "three-quarter", "long"
 fit: How the garment fits the body. Allowed values: "fitted", "semi-fitted", "relaxed", "oversized"
@@ -197,5 +197,5 @@ Include realistic stitch counts and row counts for all 6 sizes (XS, S, M, L, XL,
 
 Follow the system prompt format exactly: plain text, section headings in ALL CAPS followed by a colon, all 8 required sections in order.
 
-Yarn to reference in MATERIALS section: ${yarnConfig.weight} weight yarn${yarnName}, approximately [calculate amount] g per size.`.trim();
+Yarn to reference in MATERIALS section: ${yarnConfig.weight} weight yarn${yarnName}, calculate and include the approximate yarn amount in grams for each size based on gauge and item dimensions.`.trim();
 }

@@ -122,7 +122,7 @@ Include realistic stitch counts and row counts for all 6 sizes (XS, S, M, L, XL,
 
 Follow the system prompt format exactly: plain text, section headings in ALL CAPS followed by a colon, all 8 required sections in order.
 
-Yarn to reference in MATERIALS section: ${yarnConfig.weight} weight yarn${yarnName}, approximately [calculate amount] g per size.`.trim();
+Yarn to reference in MATERIALS section: ${yarnConfig.weight} weight yarn${yarnName}, calculate and include the approximate yarn amount in grams for each size based on gauge and item dimensions.`.trim();
 }
 
 /**
@@ -458,16 +458,12 @@ testSection("5. parsePattern — sweater size grading format", () => {
 
   assert(
     /\d+\s*\(\d+,\s*\d+,\s*\d+,\s*\d+,\s*\d+\)/.test(fullText),
-    "Size grading parenthesis format present (5 values in parens)"
+    "Six-value size grading format present (base + 5 values in parentheses)"
   );
   assert(
     /XS \(S, M, L, XL, XXL\)/.test(fullText),
     "SIZES section has all 6 size labels"
   );
-
-  // Check for 6-value grading (e.g. 80 (88, 96, 104, 112, 120))
-  const sixSizePattern = /\d+\s*\(\d+,\s*\d+,\s*\d+,\s*\d+,\s*\d+\)/;
-  assert(sixSizePattern.test(fullText), "Six-value size grading format found");
 });
 
 testSection("6. parsePattern — beanie crown decrease instructions", () => {
@@ -477,6 +473,7 @@ testSection("6. parsePattern — beanie crown decrease instructions", () => {
   );
 
   assert(instrSection !== undefined, "INSTRUCTIONS section found");
+  if (!instrSection) return;
   assert(
     instrSection.content.toLowerCase().includes("crown"),
     "Crown section mentioned in instructions"
@@ -508,6 +505,7 @@ testSection("7. parsePattern — scarf stitch repeat pattern", () => {
 
   assert(instrSection !== undefined, "INSTRUCTIONS section found");
   assert(notesSection !== undefined, "NOTES section found");
+  if (!instrSection || !notesSection) return;
   assert(
     notesSection.content.toLowerCase().includes("stitch repeat"),
     "Stitch repeat mentioned in NOTES"

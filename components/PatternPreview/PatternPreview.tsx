@@ -125,7 +125,11 @@ function renderAbbreviations(content: string) {
             </div>
           );
         }
-        return <dd key={i}>{line}</dd>;
+        return (
+          <div key={i} style={{ gridColumn: "1 / -1" }}>
+            <p className="pattern-line">{line}</p>
+          </div>
+        );
       })}
     </dl>
   );
@@ -166,20 +170,16 @@ function renderSection(section: PatternSection) {
 }
 
 export function PatternPreview({ patternText }: PatternPreviewProps) {
-  const sections = parsePattern(patternText);
-
-  const handlePrint = () => {
-    window.print();
-  };
-
-  if (!patternText || !patternText.trim()) {
+  if (!patternText.trim()) {
     return null;
   }
+
+  const sections = parsePattern(patternText);
 
   return (
     <div className="pattern-preview-wrapper">
       <div className="pattern-preview-toolbar no-print">
-        <button onClick={handlePrint} className="pattern-print-button">
+        <button onClick={() => window.print()} className="pattern-print-button">
           Print / Save as PDF
         </button>
       </div>
