@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 
 if (!process.env.ANTHROPIC_API_KEY) {
-  throw new Error("ANTHROPIC_API_KEY is not set");
+  throw new Error("Claude API credentials are not configured");
 }
 
 const claude = new Anthropic({

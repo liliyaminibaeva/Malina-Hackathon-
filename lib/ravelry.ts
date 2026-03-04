@@ -19,17 +19,19 @@ export interface RavelryYarn {
 }
 
 if (!process.env.RAVELRY_USERNAME || !process.env.RAVELRY_PASSWORD) {
-  throw new Error("RAVELRY_USERNAME and RAVELRY_PASSWORD must be set");
+  throw new Error("Ravelry API credentials are not configured");
 }
 
 const RAVELRY_BASE = "https://api.ravelry.com";
+const RAVELRY_USERNAME = process.env.RAVELRY_USERNAME;
+const RAVELRY_PASSWORD = process.env.RAVELRY_PASSWORD;
 
 export async function ravelryFetch(
   path: string,
   params?: Record<string, string>
 ): Promise<unknown> {
-  const username = process.env.RAVELRY_USERNAME!;
-  const password = process.env.RAVELRY_PASSWORD!;
+  const username = RAVELRY_USERNAME;
+  const password = RAVELRY_PASSWORD;
 
   const url = new URL(`${RAVELRY_BASE}${path}`);
   if (params) {
@@ -52,5 +54,9 @@ export async function ravelryFetch(
     throw new RavelryError(response.status, response.statusText);
   }
 
-  return response.json();
+  try {
+    return await response.json();
+  } catch {
+    throw new RavelryError(response.status, "Invalid JSON in response");
+  }
 }

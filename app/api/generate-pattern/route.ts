@@ -3,7 +3,7 @@ import claude from "@/lib/claude";
 import { SYSTEM_PROMPT, getPatternPrompt } from "@/lib/prompts";
 
 export async function POST(request: NextRequest) {
-  let body: { itemType?: unknown; styleConfig?: unknown; yarnConfig?: unknown };
+  let body: { itemType?: unknown; styleConfig?: unknown; yarnConfig?: unknown; email?: unknown };
   try {
     body = await request.json();
   } catch {
