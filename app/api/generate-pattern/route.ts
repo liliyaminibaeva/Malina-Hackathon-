@@ -26,6 +26,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (!("weight" in (yarnConfig as Record<string, unknown>)) || !(yarnConfig as Record<string, unknown>).weight) {
+    return NextResponse.json(
+      { error: "yarnConfig must include at least a weight field" },
+      { status: 400 }
+    );
+  }
+
   const userPrompt = getPatternPrompt(itemType, styleConfig, yarnConfig);
 
   try {

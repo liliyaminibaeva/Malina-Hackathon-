@@ -34,6 +34,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ yarns });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
+    if (message.includes("401")) {
+      return NextResponse.json(
+        { error: "Invalid Ravelry credentials. Check RAVELRY_USERNAME and RAVELRY_PASSWORD." },
+        { status: 500 }
+      );
+    }
     return NextResponse.json(
       { error: `Failed to fetch yarn data: ${message}` },
       { status: 500 }
