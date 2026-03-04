@@ -16,7 +16,12 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
     {
       name: "construction",
       label: "Construction",
-      options: ["Top-down", "Bottom-up", "Seamless", "Seamed"],
+      options: ["Raglan", "Circular yoke", "Dropped shoulder"],
+    },
+    {
+      name: "fit",
+      label: "Fit",
+      options: ["Oversized", "Relaxed", "Classic", "Fitted"],
     },
     {
       name: "neckline",
@@ -29,14 +34,14 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
       options: ["Long", "3/4", "Short", "Sleeveless"],
     },
     {
-      name: "fit",
-      label: "Fit",
-      options: ["Oversized", "Relaxed", "Classic", "Fitted"],
+      name: "cuff",
+      label: "Cuff",
+      options: ["Ribbed", "Rolled", "Straight"],
     },
     {
       name: "hem",
       label: "Hem",
-      options: ["Ribbed", "Rolled", "Straight", "Curved"],
+      options: ["Ribbed", "Rolled", "Straight"],
     },
   ],
   slipover: [
@@ -124,7 +129,7 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
   ],
   scarf: [
     {
-      name: "length",
+      name: "size",
       label: "Length",
       options: ["150 cm", "180 cm", "210 cm", "250 cm"],
     },
