@@ -17,6 +17,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (pattern.length > 200 * 1024) {
+    return NextResponse.json(
+      { error: "Pattern is too large" },
+      { status: 400 }
+    );
+  }
+
   try {
     const escaped = pattern
       .replace(/&/g, "&amp;")

@@ -92,7 +92,8 @@ export async function POST(request: NextRequest) {
 
     let fields: unknown;
     try {
-      const jsonText = rawText.replace(/```json\n?|\n?```/g, "").trim();
+      const jsonMatch = rawText.match(/```(?:json)?\n?([\s\S]*?)\n?```/);
+      const jsonText = jsonMatch ? jsonMatch[1].trim() : rawText.trim();
       fields = JSON.parse(jsonText);
       if (typeof fields !== "object" || fields === null || Array.isArray(fields)) {
         console.error("Unexpected Claude response structure:", rawText.slice(0, 200));

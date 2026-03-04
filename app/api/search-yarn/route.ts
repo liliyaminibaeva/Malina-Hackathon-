@@ -15,6 +15,13 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  if (q.length > 200) {
+    return NextResponse.json(
+      { error: "Query parameter q must be 200 characters or fewer" },
+      { status: 400 }
+    );
+  }
+
   try {
     const data = (await ravelryFetch("/yarns/search.json", {
       query: q.trim(),
@@ -22,7 +29,15 @@ export async function GET(request: NextRequest) {
       sort: "best",
     })) as RavelrySearchResponse;
 
-    const yarns = (data.yarns || []).map((yarn: RavelryYarn) => ({
+    if (!Array.isArray(data.yarns)) {
+      console.error("Unexpected Ravelry response: yarns is not an array", data);
+      return NextResponse.json(
+        { error: "Unexpected response from Ravelry" },
+        { status: 500 }
+      );
+    }
+
+    const yarns = data.yarns.map((yarn: RavelryYarn) => ({
       id: yarn.id,
       name: yarn.name,
       brand: yarn.yarn_company_name,

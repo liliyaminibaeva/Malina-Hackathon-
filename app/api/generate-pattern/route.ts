@@ -26,6 +26,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (!/^[a-zA-Z\s\-]+$/.test(itemType)) {
+    return NextResponse.json(
+      { error: "itemType contains invalid characters" },
+      { status: 400 }
+    );
+  }
+
   if (!yarnConfig || typeof yarnConfig !== "object" || Array.isArray(yarnConfig)) {
     return NextResponse.json(
       { error: "Missing required field: yarnConfig" },
@@ -42,6 +49,20 @@ export async function POST(request: NextRequest) {
   ) {
     return NextResponse.json(
       { error: "yarnConfig must include at least a weight field" },
+      { status: 400 }
+    );
+  }
+
+  if (JSON.stringify(styleConfig ?? null).length > 2048) {
+    return NextResponse.json(
+      { error: "styleConfig is too large" },
+      { status: 400 }
+    );
+  }
+
+  if (JSON.stringify(yarnConfig).length > 2048) {
+    return NextResponse.json(
+      { error: "yarnConfig is too large" },
       { status: 400 }
     );
   }
