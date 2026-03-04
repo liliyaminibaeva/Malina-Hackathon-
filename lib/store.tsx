@@ -28,14 +28,12 @@ interface PatternFormState {
   itemType: ItemType;
   styleConfig: StyleConfig | null;
   yarnConfig: YarnConfig | null;
-  email: string;
 }
 
 interface PatternFormContextValue extends PatternFormState {
   setItemType: (itemType: ItemType) => void;
   setStyleConfig: (config: StyleConfig) => void;
   setYarnConfig: (config: YarnConfig) => void;
-  setEmail: (email: string) => void;
   reset: () => void;
 }
 
@@ -43,7 +41,6 @@ const defaultState: PatternFormState = {
   itemType: null,
   styleConfig: null,
   yarnConfig: null,
-  email: "",
 };
 
 const PatternFormContext = createContext<PatternFormContextValue | null>(null);
@@ -60,14 +57,11 @@ export function PatternFormProvider({ children }: { children: React.ReactNode })
   const setYarnConfig = (yarnConfig: YarnConfig) =>
     setState((prev) => ({ ...prev, yarnConfig }));
 
-  const setEmail = (email: string) =>
-    setState((prev) => ({ ...prev, email }));
-
   const reset = () => setState(defaultState);
 
   return (
     <PatternFormContext.Provider
-      value={{ ...state, setItemType, setStyleConfig, setYarnConfig, setEmail, reset }}
+      value={{ ...state, setItemType, setStyleConfig, setYarnConfig, reset }}
     >
       {children}
     </PatternFormContext.Provider>

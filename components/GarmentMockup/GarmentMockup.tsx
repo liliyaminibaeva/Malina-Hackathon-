@@ -10,7 +10,6 @@ interface GarmentMockupProps {
 
 const STROKE = "#1A1814";
 const STROKE_WIDTH = 1;
-const STROKE_DASHED = "4 3";
 
 function SweaterMockup({ styleConfig, sleeveMode }: { styleConfig: StyleConfig; sleeveMode: "full" | "short" | "none" }) {
   const fit = styleConfig.fit ?? "";
@@ -70,7 +69,7 @@ function SweaterMockup({ styleConfig, sleeveMode }: { styleConfig: StyleConfig; 
   }
 
   // Shoulder straps for slipover / sleeveless
-  if (effectiveSleeve === "none" && sleeveMode === "none") {
+  if (effectiveSleeve === "none") {
     const strapW = 12;
     const lStrap0 = x0 + 8;
     const rStrap0 = x1 - 8 - strapW;
@@ -176,14 +175,12 @@ function BeanieMockup({ styleConfig }: { styleConfig: StyleConfig }) {
   );
 
   if (hasBrim && (brim === "Short ribbed" || brim === "Wide ribbed")) {
-    const brimBottom = 160 + brimH;
     const ribY1 = 160 + Math.round(brimH / 3);
     const ribY2 = 160 + Math.round((brimH * 2) / 3);
     paths.push(
       <line key="rib1" x1={38} y1={ribY1} x2={162} y2={ribY1} stroke={STROKE} strokeWidth={STROKE_WIDTH} />,
       <line key="rib2" x1={38} y1={ribY2} x2={162} y2={ribY2} stroke={STROKE} strokeWidth={STROKE_WIDTH} />
     );
-    void brimBottom;
   } else if (brim === "Folded") {
     const foldY = 160 + Math.round(brimH / 2);
     paths.push(
@@ -286,13 +283,6 @@ function HoodMockup({ styleConfig }: { styleConfig: StyleConfig }) {
 
 export default function GarmentMockup({ itemType, styleConfig, className }: GarmentMockupProps) {
   const isEmpty = Object.keys(styleConfig).length === 0;
-  const strokeProps = {
-    stroke: STROKE,
-    strokeWidth: STROKE_WIDTH,
-    strokeDasharray: isEmpty ? STROKE_DASHED : undefined,
-    fill: "none" as const,
-  };
-  void strokeProps;
 
   const svgClass = `w-full max-w-[280px] ${className ?? ""}`;
 

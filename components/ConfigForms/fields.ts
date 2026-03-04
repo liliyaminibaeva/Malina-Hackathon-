@@ -134,11 +134,6 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
       options: ["Narrow", "Medium", "Wide", "Shawl"],
     },
     {
-      name: "length",
-      label: "Length",
-      options: ["Short", "Medium", "Long", "Extra long"],
-    },
-    {
       name: "stitchPattern",
       label: "Stitch pattern",
       options: ["Stockinette", "Garter", "Ribbed", "Textured"],

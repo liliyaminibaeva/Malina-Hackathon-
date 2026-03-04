@@ -16,12 +16,16 @@ export default function GeneratePage() {
   const [pattern, setPattern] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!yarnConfig) {
+    if (!itemType) {
+      router.replace("/");
+    } else if (!styleConfig) {
+      router.replace("/configure");
+    } else if (!yarnConfig) {
       router.replace("/yarn");
     }
-  }, [yarnConfig, router]);
+  }, [itemType, styleConfig, yarnConfig, router]);
 
-  if (!yarnConfig) return null;
+  if (!itemType || !styleConfig || !yarnConfig) return null;
 
   async function onGenerate() {
     setError(null);

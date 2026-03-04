@@ -9,6 +9,8 @@ Next.js App Router, TypeScript, Tailwind CSS v4, react-hook-form.
 - `app/` — Next.js pages (one `page.tsx` per route)
 - `app/api/` — API routes (analyze-photo, search-yarn, generate-pattern)
 - `components/` — UI components, one directory per component with an `index.ts` barrel export
+- `components/GarmentMockup/` — Live parametric SVG schematic reflecting current StyleConfig; shown in the right column of `/configure`
+- `components/ItemIcons/` — Eight SVG line-drawing icons (one per ItemType); used by ItemPicker
 - `lib/store.tsx` — Shared React context for cross-step form state
 - `lib/claude.ts` — Shared Anthropic client singleton; import this, do not instantiate your own
 - `lib/ravelry.ts` — Ravelry API fetch helper with Basic Auth
@@ -21,7 +23,7 @@ Next.js App Router, TypeScript, Tailwind CSS v4, react-hook-form.
 1. `/` — Pick item type (ItemPicker)
 2. `/configure` — Style config via manual form or photo upload
 3. `/yarn` — Yarn search + manual yarn details
-4. `/generate` — Email input, pattern generation, preview and print
+4. `/generate` — Pattern generation, preview and print
 
 ## State Management
 
@@ -30,7 +32,7 @@ All cross-step state lives in `PatternFormContext` (`lib/store.tsx`). Consume vi
 Each page guards against missing upstream state by redirecting backward if its required context value is null:
 - `/configure` redirects to `/` if `itemType` is null
 - `/yarn` redirects to `/configure` if `styleConfig` is null
-- `/generate` redirects to `/yarn` if `yarnConfig` is null
+- `/generate` redirects to `/` if `itemType` is null, to `/configure` if `styleConfig` is null, to `/yarn` if `yarnConfig` is null
 
 State is in-memory only and resets on full page reload.
 
@@ -40,6 +42,7 @@ State is in-memory only and resets on full page reload.
 - Style config fields render as toggle-button groups (not selects/dropdowns)
 - Field definitions for all item types live in `components/ConfigForms/fields.ts`
 - When passing `defaultValues` to ConfigForm from external data (e.g. photo analysis), use a `key` prop to force re-mount when data changes
+- `ConfigForm` accepts an optional `onValuesChange: (values: StyleConfig) => void` prop; called on every form value change — used to lift live state to the parent (e.g. for the GarmentMockup live preview on `/configure`)
 
 ## Component Conventions
 

@@ -27,7 +27,17 @@ export default function ConfigurePage() {
 
   if (!itemType) return null;
 
-  const itemLabel = itemType.charAt(0).toUpperCase() + itemType.slice(1);
+  const ITEM_DISPLAY_NAMES: Record<string, string> = {
+    sweater: "Sweater",
+    slipover: "Slipover",
+    "t-shirt": "T-shirt",
+    beanie: "Beanie",
+    gloves: "Gloves",
+    scarf: "Scarf",
+    minnens: "Mittens",
+    hood: "Hood",
+  };
+  const itemLabel = ITEM_DISPLAY_NAMES[itemType] ?? itemType.charAt(0).toUpperCase() + itemType.slice(1);
 
   return (
     <main className="mx-auto min-h-screen max-w-5xl px-8 py-16">
