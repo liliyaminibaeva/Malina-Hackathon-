@@ -59,7 +59,31 @@ Every pattern must contain these sections in exactly this order:
 Do not add extra sections or change the order. Do not omit any section.`;
 
 
-export const PHOTO_ANALYSIS_PROMPT = "";
+export const PHOTO_ANALYSIS_PROMPT = `Analyze the knitting photo and identify the following attributes of the garment or accessory shown. Return your answer as a JSON object only — no explanation, no extra text, just the JSON.
+
+Attributes to detect:
+
+construction: How the garment is constructed. Allowed values: "raglan", "yoke", "dropped shoulder", "set-in sleeve", "seamless"
+neckline: The shape of the neckline. Allowed values: "crew neck", "v-neck", "turtleneck", "boat neck", "scoop neck"
+sleeveLength: The length of the sleeves. Allowed values: "sleeveless", "short", "three-quarter", "long"
+fit: How the garment fits the body. Allowed values: "fitted", "semi-fitted", "relaxed", "oversized"
+hem: The shape or style of the hem. Allowed values: "straight", "curved", "split", "ribbed"
+
+Rules:
+- Only include keys you can confidently identify from the photo.
+- Each value must be exactly one of the allowed values listed above.
+- If an attribute is unclear or not applicable, omit that key from the JSON entirely.
+- Do not add any keys other than the five listed above.
+- Do not include any explanation or text outside the JSON object.
+
+Example output:
+{
+  "construction": "raglan",
+  "neckline": "crew neck",
+  "sleeveLength": "long",
+  "fit": "relaxed",
+  "hem": "ribbed"
+}`;
 
 const ITEM_LABELS: Record<ItemType, string> = {
   sweater: "pullover sweater",
