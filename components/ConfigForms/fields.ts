@@ -1,0 +1,141 @@
+import type { ItemType } from "@/lib/store";
+
+export interface FieldDefinition {
+  name: string;
+  label: string;
+  options: string[];
+}
+
+export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
+  sweater: [
+    {
+      name: "construction",
+      label: "Construction",
+      options: ["Top-down", "Bottom-up", "Seamless", "Seamed"],
+    },
+    {
+      name: "neckline",
+      label: "Neckline",
+      options: ["Crew neck", "V-neck", "Turtleneck", "Boat neck"],
+    },
+    {
+      name: "sleeveLength",
+      label: "Sleeve length",
+      options: ["Long", "3/4", "Short", "Sleeveless"],
+    },
+    {
+      name: "fit",
+      label: "Fit",
+      options: ["Oversized", "Relaxed", "Classic", "Fitted"],
+    },
+    {
+      name: "hem",
+      label: "Hem",
+      options: ["Ribbed", "Rolled", "Straight", "Curved"],
+    },
+  ],
+  slipover: [
+    {
+      name: "construction",
+      label: "Construction",
+      options: ["Top-down", "Bottom-up", "Seamless", "Seamed"],
+    },
+    {
+      name: "neckline",
+      label: "Neckline",
+      options: ["Crew neck", "V-neck", "Scoop neck", "Square neck"],
+    },
+    {
+      name: "fit",
+      label: "Fit",
+      options: ["Oversized", "Relaxed", "Classic", "Fitted"],
+    },
+    {
+      name: "hem",
+      label: "Hem",
+      options: ["Ribbed", "Rolled", "Straight", "Curved"],
+    },
+  ],
+  "t-shirt": [
+    {
+      name: "neckline",
+      label: "Neckline",
+      options: ["Crew neck", "V-neck", "Scoop neck", "Boat neck"],
+    },
+    {
+      name: "fit",
+      label: "Fit",
+      options: ["Oversized", "Relaxed", "Classic", "Fitted"],
+    },
+    {
+      name: "hem",
+      label: "Hem",
+      options: ["Ribbed", "Rolled", "Straight", "Curved"],
+    },
+  ],
+  beanie: [
+    {
+      name: "brim",
+      label: "Brim",
+      options: ["No brim", "Folded", "Short ribbed", "Wide ribbed"],
+    },
+    {
+      name: "crownShape",
+      label: "Crown shape",
+      options: ["Classic", "Slouchy", "Pointy", "Flat"],
+    },
+  ],
+  gloves: [
+    {
+      name: "coverage",
+      label: "Coverage",
+      options: ["Full fingers", "Fingerless", "Half fingers", "Mittens"],
+    },
+    {
+      name: "cuff",
+      label: "Cuff",
+      options: ["Short", "Long", "Ribbed", "Folded"],
+    },
+  ],
+  scarf: [
+    {
+      name: "width",
+      label: "Width",
+      options: ["Narrow", "Medium", "Wide", "Shawl"],
+    },
+    {
+      name: "length",
+      label: "Length",
+      options: ["Short", "Medium", "Long", "Extra long"],
+    },
+    {
+      name: "stitchPattern",
+      label: "Stitch pattern",
+      options: ["Stockinette", "Garter", "Ribbed", "Textured"],
+    },
+  ],
+  minnens: [
+    {
+      name: "cuffStyle",
+      label: "Cuff style",
+      options: ["Short ribbed", "Long ribbed", "Folded", "No cuff"],
+    },
+    {
+      name: "thumbType",
+      label: "Thumb type",
+      options: ["Afterthought", "Gusset", "No thumb", "Flap"],
+    },
+  ],
+  hood: [
+    {
+      name: "type",
+      label: "Hood type",
+      options: ["Standard", "Oversized", "Gnome", "Cowl"],
+    },
+    {
+      name: "closure",
+      label: "Closure",
+      options: ["Open", "Drawstring", "Button", "Zipper"],
+    },
+  ],
+};

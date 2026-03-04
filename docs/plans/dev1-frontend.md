@@ -70,7 +70,7 @@ Steps:
 - Create: `app/configure/page.tsx`
 
 Steps:
-- [ ] Create `fields.ts` with field definitions for all 8 item types. Each field has: `name`, `label`, `options[]`. Fields per type:
+- [x] Create `fields.ts` with field definitions for all 8 item types. Each field has: `name`, `label`, `options[]`. Fields per type:
   - Sweater: construction, neckline, sleeve length, fit, hem
   - Slipover: construction, neckline, fit, hem
   - T-shirt: neckline, fit, hem
@@ -79,12 +79,12 @@ Steps:
   - Scarf: width, length, stitch pattern
   - Minnens: cuff style, thumb type
   - Hood: type, closure
-- [ ] Build `ConfigForm` using react-hook-form — renders the correct field set based on `itemType` from context
-- [ ] Each field renders as a group of toggle buttons (not a dropdown)
-- [ ] On submit: save to context, navigate to `/yarn`
-- [ ] `app/configure/page.tsx`: render path selector (photo / manual) + show `ConfigForm` for manual path
-- [ ] Redirect to `/` if no `itemType` in context
-- [ ] Run `npm run build`
+- [x] Build `ConfigForm` using react-hook-form — renders the correct field set based on `itemType` from context
+- [x] Each field renders as a group of toggle buttons (not a dropdown)
+- [x] On submit: save to context, navigate to `/yarn`
+- [x] `app/configure/page.tsx`: render path selector (photo / manual) + show `ConfigForm` for manual path
+- [x] Redirect to `/` if no `itemType` in context
+- [x] Run `npm run build`
 
 ### Task 4: Step 2 — Photo upload path
 
