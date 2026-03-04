@@ -21,7 +21,7 @@ Knitting pattern generator web app built with Next.js 14, Claude API, Ravelry AP
 - Build POST /api/analyze-photo: accept image upload (multipart), send to Claude vision API, return mapped config form fields
 - Build GET /api/search-yarn: proxy Ravelry yarn search, return name/weight/gauge/needle size
 - Build POST /api/generate-pattern: accept full config object, call Claude with pattern generation prompt, return pattern text
-- Build POST /api/send-pattern: accept pattern text + email, generate PDF with @react-pdf/renderer, send via Resend with PDF attachment, return success
+- Build POST /api/send-pattern: accept pattern text, return formatted HTML for browser rendering (user saves as PDF via browser print)
 - Add error handling and input validation to all API routes
 
 ## Dev 3 — Prompts & PDF Template
@@ -29,5 +29,5 @@ Knitting pattern generator web app built with Next.js 14, Claude API, Ravelry AP
 - Write system prompt for pattern generation: PetiteKnit style brief, output structure (header/materials/gauge/abbreviations/notes/instructions), example excerpt
 - Write item-specific generation prompts for all 8 item types incorporating config fields and size grading XS–XXL
 - Write photo analysis prompt: define what visual attributes to detect (neckline, silhouette, texture, colorwork, construction) and how to map them to form fields
-- Build PDF template component using @react-pdf/renderer: sections for header, materials, gauge, abbreviations, notes, numbered instructions with inline size variants in brackets
+- Build printable HTML template with print CSS: sections for header, materials, gauge, abbreviations, notes, numbered instructions with inline size variants in brackets — optimized for browser Print → Save as PDF
 - Test all prompts manually via Claude API and iterate on output quality
