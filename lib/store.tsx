@@ -9,7 +9,7 @@ export type ItemType =
   | "beanie"
   | "gloves"
   | "scarf"
-  | "minnens"
+  | "mittens"
   | "hood"
   | null;
 
@@ -54,7 +54,7 @@ export function PatternFormProvider({ children }: { children: React.ReactNode })
     setState((prev) => ({ ...prev, itemType, styleConfig: null, yarnConfig: null }));
 
   const setStyleConfig = (styleConfig: StyleConfig) =>
-    setState((prev) => ({ ...prev, styleConfig }));
+    setState((prev) => ({ ...prev, styleConfig, yarnConfig: null }));
 
   const setYarnConfig = (yarnConfig: YarnConfig) =>
     setState((prev) => ({ ...prev, yarnConfig }));
