@@ -57,11 +57,9 @@ export default function PhotoUpload({ onAnalysisComplete, onReset }: PhotoUpload
       const data: StyleConfig = await res.json();
       setUploadState("done");
       onAnalysisComplete(data);
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Something went wrong.";
+    } catch {
       setErrorMsg(
-        `Could not analyse the photo. ${message} You can still fill in the form manually.`
+        "Could not analyse the photo. You can still fill in the form manually."
       );
       setUploadState("error");
     }

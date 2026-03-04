@@ -44,8 +44,7 @@ export default function GeneratePage() {
         body: JSON.stringify({ itemType, styleConfig, yarnConfig, email: data.email }),
       });
       if (!res.ok) {
-        const msg = await res.text().catch(() => "");
-        throw new Error(msg || `Server error ${res.status}`);
+        throw new Error("Pattern generation failed. Please try again.");
       }
       const result = await res.json();
       // Support { pattern: "..." }, { sections: [...] }, or raw string
