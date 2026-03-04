@@ -9,6 +9,11 @@ export interface FieldDefinition {
 export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
   sweater: [
     {
+      name: "size",
+      label: "Size",
+      options: ["XS", "S", "M", "L", "XL", "2XL"],
+    },
+    {
       name: "construction",
       label: "Construction",
       options: ["Top-down", "Bottom-up", "Seamless", "Seamed"],
@@ -36,6 +41,11 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
   ],
   slipover: [
     {
+      name: "size",
+      label: "Size",
+      options: ["XS", "S", "M", "L", "XL", "2XL"],
+    },
+    {
       name: "construction",
       label: "Construction",
       options: ["Top-down", "Bottom-up", "Seamless", "Seamed"],
@@ -58,6 +68,11 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
   ],
   "t-shirt": [
     {
+      name: "size",
+      label: "Size",
+      options: ["XS", "S", "M", "L", "XL", "2XL"],
+    },
+    {
       name: "neckline",
       label: "Neckline",
       options: ["Crew neck", "V-neck", "Scoop neck", "Boat neck"],
@@ -75,6 +90,11 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
   ],
   beanie: [
     {
+      name: "size",
+      label: "Size",
+      options: ["S/M", "M/L", "L/XL"],
+    },
+    {
       name: "brim",
       label: "Brim",
       options: ["No brim", "Folded", "Short ribbed", "Wide ribbed"],
@@ -87,6 +107,11 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
   ],
   gloves: [
     {
+      name: "size",
+      label: "Size",
+      options: ["S/M", "M/L", "L/XL"],
+    },
+    {
       name: "coverage",
       label: "Coverage",
       options: ["Full fingers", "Fingerless", "Half fingers", "Mittens"],
@@ -98,6 +123,11 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
     },
   ],
   scarf: [
+    {
+      name: "size",
+      label: "Length",
+      options: ["150 cm", "180 cm", "210 cm", "250 cm"],
+    },
     {
       name: "width",
       label: "Width",
@@ -116,6 +146,11 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
   ],
   minnens: [
     {
+      name: "size",
+      label: "Size",
+      options: ["S/M", "M/L", "L/XL"],
+    },
+    {
       name: "cuffStyle",
       label: "Cuff style",
       options: ["Short ribbed", "Long ribbed", "Folded", "No cuff"],
@@ -127,6 +162,11 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
     },
   ],
   hood: [
+    {
+      name: "size",
+      label: "Size",
+      options: ["S/M", "M/L", "L/XL"],
+    },
     {
       name: "type",
       label: "Hood type",

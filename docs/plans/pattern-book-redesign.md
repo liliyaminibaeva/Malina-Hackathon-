@@ -129,7 +129,7 @@ Add a `size` field as the **first** field for every item type:
 - For accessories (beanie, gloves, mittens, hood): `{ name: "size", label: "Size", options: ["S/M", "M/L", "L/XL"] }`
 - For scarf: `{ name: "size", label: "Length", options: ["150 cm", "180 cm", "210 cm", "250 cm"] }`
 
-- [ ] Add size field as first field to all 8 item types in `fields.ts`
+- [x] Add size field as first field to all 8 item types in `fields.ts`
 
 ### Task 5: Create GarmentMockup SVG component
 
