@@ -72,15 +72,17 @@ export default function ConfigurePage() {
       <StepIndicator current={2} />
 
       <div className="mb-8 space-y-2">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="flex items-center gap-1 text-sm text-stone-500 hover:text-stone-800"
-            aria-label="Back to item selection"
-          >
-            ← Back
-          </Link>
-        </div>
+        {!selectedPath && (
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="flex items-center gap-1 text-sm text-stone-500 hover:text-stone-800"
+              aria-label="Back to item selection"
+            >
+              ← Back
+            </Link>
+          </div>
+        )}
         <h1 className="text-3xl font-semibold tracking-tight text-stone-900">
           Configure your {itemLabel}
         </h1>

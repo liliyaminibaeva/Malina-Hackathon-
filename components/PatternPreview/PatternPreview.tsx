@@ -24,10 +24,8 @@ function parseRawPattern(raw: string): PatternSection[] {
 
   for (const line of lines) {
     const trimmed = line.trim();
-    // Detect section headers: all-caps lines or lines ending with ":"
-    const isHeader =
-      /^[A-Z][A-Z\s&]{3,}$/.test(trimmed) ||
-      (trimmed.endsWith(":") && trimmed.length < 50 && !trimmed.includes("."));
+    // Detect section headers: all-caps lines only (e.g. MATERIALS, GAUGE, INSTRUCTIONS)
+    const isHeader = /^[A-Z][A-Z\s&]{3,}$/.test(trimmed);
 
     if (isHeader && trimmed.length > 0) {
       if (current) sections.push(current);
@@ -49,8 +47,9 @@ export default function PatternPreview({ pattern }: PatternPreviewProps) {
   const sections: PatternSection[] =
     typeof pattern === "string"
       ? parseRawPattern(pattern)
-      : pattern.sections ??
-        (pattern.raw ? parseRawPattern(pattern.raw) : []);
+      : Array.isArray(pattern.sections)
+        ? pattern.sections
+        : (pattern.raw ? parseRawPattern(pattern.raw) : []);
 
   const rawText =
     typeof pattern === "string"
