@@ -3,21 +3,23 @@ import claude from "@/lib/claude";
 import { SYSTEM_PROMPT, getPatternPrompt } from "@/lib/prompts";
 
 export async function POST(request: NextRequest) {
-  let body: { itemType?: unknown; styleConfig?: unknown; yarnConfig?: unknown };
+  let body: { itemType?: unknown; styleConfig?: unknown; yarnConfig?: unknown; email?: unknown };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const { itemType, styleConfig, yarnConfig } = body;
+  const { itemType: rawItemType, styleConfig, yarnConfig, email } = body;
 
-  if (!itemType || typeof itemType !== "string" || itemType.trim() === "") {
+  if (!rawItemType || typeof rawItemType !== "string" || rawItemType.trim() === "") {
     return NextResponse.json(
       { error: "Missing required field: itemType" },
       { status: 400 }
     );
   }
+
+  const itemType = rawItemType.trim();
 
   if (itemType.length > 100) {
     return NextResponse.json(
@@ -26,9 +28,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!/^[a-zA-Z0-9 -]+$/.test(itemType.trim())) {
+  if (!/^[a-zA-Z0-9 -]+$/.test(itemType)) {
     return NextResponse.json(
       { error: "itemType contains invalid characters" },
+      { status: 400 }
+    );
+  }
+
+  if (email !== undefined && (typeof email !== "string" || email.trim() === "")) {
+    return NextResponse.json(
+      { error: "email must be a non-empty string if provided" },
       { status: 400 }
     );
   }

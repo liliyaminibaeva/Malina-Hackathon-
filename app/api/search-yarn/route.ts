@@ -51,8 +51,8 @@ export async function GET(request: NextRequest) {
     if (error instanceof RavelryError && error.status === 401) {
       console.error(error);
       return NextResponse.json(
-        { error: "Invalid Ravelry credentials" },
-        { status: 500 }
+        { error: "Service temporarily unavailable" },
+        { status: 503 }
       );
     }
     console.error(error);

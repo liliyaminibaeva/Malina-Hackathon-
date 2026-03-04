@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
       const jsonText = jsonMatch ? jsonMatch[1].trim() : rawText.trim();
       fields = JSON.parse(jsonText);
       if (typeof fields !== "object" || fields === null || Array.isArray(fields)) {
-        console.error("Unexpected Claude response structure");
+        console.error("Unexpected Claude response structure", fields);
         return NextResponse.json(
           { error: "Failed to parse Claude response as JSON" },
           { status: 500 }
