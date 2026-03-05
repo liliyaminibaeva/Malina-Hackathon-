@@ -103,20 +103,22 @@ export const PHOTO_ANALYSIS_PROMPT = `Analyze the knitting photo and identify th
 
 Attributes to detect (use exact values listed):
 
+construction: "Raglan" | "Dropped shoulder"
 neckline: "Crew neck" | "V-neck" | "Turtleneck" | "Boat neck"
 sleeveLength: "Long" | "3/4" | "Short" | "Sleeveless"
 fit: "Fitted" | "Classic" | "Relaxed" | "Oversized"
-hem: "Ribbed" | "Rolled" | "Straight"
+hem: "Ribbed" | "Straight"
 
 Rules:
 - Only include keys you can confidently identify from the photo.
 - Each value must match exactly one of the allowed values (including capitalisation).
 - If an attribute is unclear or not visible, omit that key entirely.
-- Do not add any keys other than the four listed above.
+- Do not add any keys other than the five listed above.
 - Do not include any text outside the JSON object.
 
 Example output:
 {
+  "construction": "Raglan",
   "neckline": "Crew neck",
   "sleeveLength": "Long",
   "fit": "Relaxed",
