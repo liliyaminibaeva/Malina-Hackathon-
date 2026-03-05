@@ -114,13 +114,27 @@ export default function YarnSearch() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  const WEIGHT_TO_NEEDLE: Record<string, string> = {
+    "Lace": "2.25",
+    "Fingering": "2.5",
+    "Sport": "3.25",
+    "DK": "4.0",
+    "Worsted": "4.5",
+    "Aran": "5.0",
+    "Bulky": "6.5",
+    "Super Bulky": "10.0",
+  };
+
   function selectYarn(yarn: YarnResult) {
     setSelectedYarn(yarn);
     setQuery(yarn.name);
     setDropdownOpen(false);
     setValue("weight", yarn.weight ?? "");
     if (yarn.gauge != null) setValue("gaugeStitches", String(yarn.gauge));
-    if (yarn.needleSize != null) setValue("needleSize", String(yarn.needleSize));
+    if (yarn.gauge != null) setValue("gaugeRows", String(Math.round(yarn.gauge * 1.4)));
+    if (yarn.weight && WEIGHT_TO_NEEDLE[yarn.weight]) {
+      setValue("needleSize", WEIGHT_TO_NEEDLE[yarn.weight]);
+    }
   }
 
   function onSubmit(data: FormValues) {
