@@ -11,7 +11,6 @@ import {
   GlovesIcon,
   ScarfIcon,
   MittensIcon,
-  HoodIcon,
 } from "@/components/ItemIcons";
 
 interface Item {
@@ -26,15 +25,36 @@ const TOPS: Item[] = [
   { id: "t-shirt", label: "T-shirt", Icon: TshirtIcon },
 ];
 
+const TOPS_COMING_SOON = ["Cardigan"];
+
 const ACCESSORIES: Item[] = [
   { id: "beanie", label: "Beanie", Icon: BeanieIcon },
   { id: "gloves", label: "Gloves", Icon: GlovesIcon },
   { id: "scarf", label: "Scarf", Icon: ScarfIcon },
   { id: "mittens", label: "Mittens", Icon: MittensIcon },
-  { id: "hood", label: "Hood", Icon: HoodIcon },
 ];
 
+const ACCESSORIES_COMING_SOON = ["Hood"];
+
 const BOTTOMS_COMING_SOON = ["Socks", "Pants", "Shorts"];
+
+function ComingSoonRow({ label }: { label: string }) {
+  return (
+    <div className="flex w-full items-center gap-5 py-4 border-b border-[#DDD8CF] opacity-30 cursor-not-allowed">
+      <span className="w-10 h-12 flex-shrink-0 rounded bg-[#E0D9CE]" />
+      <span className="font-serif text-xl text-[#1A1814] tracking-wide">{label}</span>
+      <span className="ml-auto text-[9px] uppercase tracking-[0.18em] text-[#7A7068]">Soon</span>
+    </div>
+  );
+}
+
+function CategoryLabel({ children }: { children: string }) {
+  return (
+    <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-[#9A9088] mt-8 mb-1">
+      — {children}
+    </p>
+  );
+}
 
 export default function ItemPicker() {
   const router = useRouter();
@@ -47,48 +67,41 @@ export default function ItemPicker() {
 
   return (
     <div>
-      <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-[#7A7068] mt-8 mb-2">
-        Tops
-      </p>
+      <CategoryLabel>Tops</CategoryLabel>
       {TOPS.map((item) => (
         <button
           key={item.id}
           onClick={() => handleSelect(item.id)}
-          className="flex w-full items-center gap-5 py-4 border-b border-[#DDD8CF] hover:bg-[#F3EEE5] transition-colors cursor-pointer text-left"
+          className="flex w-full items-center gap-5 py-4 border-b border-[#DDD8CF] hover:bg-[#F0EAE0] transition-colors cursor-pointer text-left group"
         >
-          <item.Icon width={40} height={48} className="text-[#1A1814] opacity-80 flex-shrink-0" />
-          <span className="text-base text-[#1A1814] tracking-wide">{item.label}</span>
-          <span className="text-[#7A7068] ml-auto">›</span>
+          <item.Icon width={40} height={48} className="flex-shrink-0 opacity-75 group-hover:opacity-100 transition-opacity" />
+          <span className="font-serif text-xl text-[#1A1814] tracking-wide">{item.label}</span>
+          <span className="ml-auto text-[#B0A898] text-lg">›</span>
         </button>
       ))}
+      {TOPS_COMING_SOON.map((label) => (
+        <ComingSoonRow key={label} label={label} />
+      ))}
 
-      <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-[#7A7068] mt-8 mb-2">
-        Accessories
-      </p>
+      <CategoryLabel>Accessories</CategoryLabel>
       {ACCESSORIES.map((item) => (
         <button
           key={item.id}
           onClick={() => handleSelect(item.id)}
-          className="flex w-full items-center gap-5 py-4 border-b border-[#DDD8CF] hover:bg-[#F3EEE5] transition-colors cursor-pointer text-left"
+          className="flex w-full items-center gap-5 py-4 border-b border-[#DDD8CF] hover:bg-[#F0EAE0] transition-colors cursor-pointer text-left group"
         >
-          <item.Icon width={40} height={48} className="text-[#1A1814] opacity-80 flex-shrink-0" />
-          <span className="text-base text-[#1A1814] tracking-wide">{item.label}</span>
-          <span className="text-[#7A7068] ml-auto">›</span>
+          <item.Icon width={40} height={48} className="flex-shrink-0 opacity-75 group-hover:opacity-100 transition-opacity" />
+          <span className="font-serif text-xl text-[#1A1814] tracking-wide">{item.label}</span>
+          <span className="ml-auto text-[#B0A898] text-lg">›</span>
         </button>
       ))}
+      {ACCESSORIES_COMING_SOON.map((label) => (
+        <ComingSoonRow key={label} label={label} />
+      ))}
 
-      <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-[#7A7068] mt-8 mb-2">
-        Bottoms
-      </p>
+      <CategoryLabel>Bottoms</CategoryLabel>
       {BOTTOMS_COMING_SOON.map((label) => (
-        <div
-          key={label}
-          className="flex w-full items-center gap-5 py-4 border-b border-[#DDD8CF] opacity-40 cursor-not-allowed"
-        >
-          <span className="w-10 h-12 flex-shrink-0" />
-          <span className="text-base text-[#1A1814] tracking-wide">{label}</span>
-          <span className="ml-auto text-[9px] uppercase tracking-[0.15em] text-[#7A7068]">Coming soon</span>
-        </div>
+        <ComingSoonRow key={label} label={label} />
       ))}
     </div>
   );
