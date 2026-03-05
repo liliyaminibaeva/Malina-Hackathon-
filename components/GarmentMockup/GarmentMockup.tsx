@@ -16,125 +16,154 @@ function SweaterMockup({ styleConfig, sleeveMode }: { styleConfig: StyleConfig; 
   const neckline = styleConfig.neckline ?? "";
   const sleeveLength = styleConfig.sleeveLength ?? "";
   const hem = styleConfig.hem ?? "";
+  const cuff = styleConfig.cuff ?? "";
+  const construction = styleConfig.construction ?? "";
 
-  // Body x bounds based on fit
-  let x0 = 43, x1 = 157;
-  if (fit === "Oversized") { x0 = 30; x1 = 170; }
-  else if (fit === "Relaxed") { x0 = 38; x1 = 162; }
-  else if (fit === "Fitted") { x0 = 48; x1 = 152; }
-
-  const bodyTop = 80;
-  const bodyBottom = 200;
   const cx = 100;
 
-  // Effective sleeve mode: slipover/sleeveless override
-  let effectiveSleeve = sleeveMode;
+  // Body half-width and sleeve width at shoulder based on fit
+  let halfW = 48, sleeveW = 38;
+  if (fit === "Oversized")  { halfW = 62; sleeveW = 30; }
+  else if (fit === "Relaxed") { halfW = 54; sleeveW = 34; }
+  else if (fit === "Fitted")  { halfW = 42; sleeveW = 40; }
+  const wristW = 20;
+
+  const x0 = cx - halfW;
+  const x1 = cx + halfW;
+  const bodyTop = 78;
+  const bodyBottom = 208;
+  const sleeveDropY = 10; // how much sleeve top drops from shoulder
+
+  // Effective sleeve mode
+  let eff: "full" | "short" | "none" = sleeveMode;
   if (sleeveMode === "full") {
-    if (sleeveLength === "Short") effectiveSleeve = "short";
-    else if (sleeveLength === "Sleeveless") effectiveSleeve = "none";
+    if (sleeveLength === "Short") eff = "short";
+    else if (sleeveLength === "Sleeveless") eff = "none";
   }
 
-  // Sleeve y bottom
+  // Sleeve end Y
   let sleeveEndY = 185;
-  if (sleeveLength === "3/4") sleeveEndY = 150;
-  else if (sleeveLength === "Short" || effectiveSleeve === "short") sleeveEndY = 115;
+  if (eff === "short") sleeveEndY = 112;
+  else if (sleeveLength === "3/4") sleeveEndY = 148;
 
-  // Build SVG paths
   const paths: React.ReactNode[] = [];
 
-  // Left sleeve
-  if (effectiveSleeve === "full" || effectiveSleeve === "short") {
-    const sleeveTopOuter = x0 - 14;
-    const sleeveTopInner = x0;
-    const sleeveBottomOuter = sleeveTopOuter + 4;
-    const sleeveBottomInner = sleeveTopInner + 2;
+  // --- SLEEVES (drawn first, behind body) ---
+  if (eff === "full" || eff === "short") {
+    // Each sleeve is a trapezoid: wide at shoulder, narrowing to wrist
+    // Left: inner-top(x0,bodyTop) → outer-top → outer-wrist → inner-wrist(x0,sleeveEndY)
     paths.push(
       <path
         key="lsleeve"
-        d={`M ${sleeveTopInner} ${bodyTop} L ${sleeveTopOuter} ${bodyTop + 10} L ${sleeveBottomOuter} ${sleeveEndY} L ${sleeveBottomInner} ${sleeveEndY} L ${sleeveTopInner + 2} ${bodyTop + 10} Z`}
-        stroke={STROKE}
-        fill="none"
-        strokeWidth={STROKE_WIDTH}
-      />
-    );
-    paths.push(
+        d={`M ${x0} ${bodyTop} L ${x0 - sleeveW} ${bodyTop + sleeveDropY} L ${x0 - wristW} ${sleeveEndY} L ${x0} ${sleeveEndY} Z`}
+        stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH}
+      />,
       <path
         key="rsleeve"
-        d={`M ${x1} ${bodyTop} L ${x1 + 14} ${bodyTop + 10} L ${x1 + 14 - 4} ${sleeveEndY} L ${x1 - 2} ${sleeveEndY} L ${x1 - 2} ${bodyTop + 10} Z`}
-        stroke={STROKE}
-        fill="none"
-        strokeWidth={STROKE_WIDTH}
+        d={`M ${x1} ${bodyTop} L ${x1 + sleeveW} ${bodyTop + sleeveDropY} L ${x1 + wristW} ${sleeveEndY} L ${x1} ${sleeveEndY} Z`}
+        stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH}
       />
     );
   }
 
-  // Shoulder straps for slipover / sleeveless
-  if (effectiveSleeve === "none") {
-    const strapW = 12;
-    const lStrap0 = x0 + 8;
-    const rStrap0 = x1 - 8 - strapW;
+  // --- SHOULDER STRAPS (slipover only) ---
+  if (sleeveMode === "none") {
+    const strapW = 14;
     paths.push(
-      <rect key="lstrapbox" x={lStrap0} y={bodyTop - 20} width={strapW} height={20} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />,
-      <rect key="rstrapbox" x={rStrap0} y={bodyTop - 20} width={strapW} height={20} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />
+      <rect key="lstrap" x={x0 + 10} y={bodyTop - 22} width={strapW} height={22} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />,
+      <rect key="rstrap" x={x1 - 10 - strapW} y={bodyTop - 22} width={strapW} height={22} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />
     );
   }
 
-  // Body trapezoid (slight taper at top)
-  const bodyTopL = x0 + (effectiveSleeve === "none" ? 4 : 0);
-  const bodyTopR = x1 - (effectiveSleeve === "none" ? 4 : 0);
+  // --- BODY with neckline carved into top edge ---
+  // Neckline parameters: leftX, rightX, and the SVG path segment between them
+  let neckLeft: number, neckRight: number, neckSeg: string;
+  let collarPath: string | null = null;
+
+  if (neckline === "V-neck") {
+    neckLeft = cx - 22; neckRight = cx + 22;
+    neckSeg = `L ${cx} ${bodyTop + 28} L ${neckRight} ${bodyTop}`;
+  } else if (neckline === "Boat neck") {
+    neckLeft = cx - 38; neckRight = cx + 38;
+    neckSeg = `Q ${cx} ${bodyTop + 8} ${neckRight} ${bodyTop}`;
+  } else if (neckline === "Scoop neck") {
+    neckLeft = cx - 26; neckRight = cx + 26;
+    neckSeg = `Q ${cx} ${bodyTop + 22} ${neckRight} ${bodyTop}`;
+  } else if (neckline === "Square neck") {
+    neckLeft = cx - 20; neckRight = cx + 20;
+    neckSeg = `L ${cx - 20} ${bodyTop + 18} L ${neckRight} ${bodyTop + 18} L ${neckRight} ${bodyTop}`;
+  } else if (neckline === "Turtleneck") {
+    neckLeft = cx - 16; neckRight = cx + 16;
+    neckSeg = `L ${neckRight} ${bodyTop}`;
+    collarPath = `M ${neckLeft} ${bodyTop} L ${neckLeft} ${bodyTop - 26} Q ${cx} ${bodyTop - 32} ${neckRight} ${bodyTop - 26} L ${neckRight} ${bodyTop}`;
+  } else {
+    // Crew neck (default)
+    neckLeft = cx - 18; neckRight = cx + 18;
+    neckSeg = `Q ${cx} ${bodyTop + 14} ${neckRight} ${bodyTop}`;
+  }
+
+  // Body: rectangle with neckline opening cut into the top edge
   paths.push(
     <path
       key="body"
-      d={`M ${bodyTopL} ${bodyTop} L ${x0} ${bodyBottom} L ${x1} ${bodyBottom} L ${bodyTopR} ${bodyTop}`}
-      stroke={STROKE}
-      fill="none"
-      strokeWidth={STROKE_WIDTH}
+      d={`M ${x0} ${bodyTop} L ${neckLeft} ${bodyTop} ${neckSeg} L ${x1} ${bodyTop} L ${x1} ${bodyBottom} L ${x0} ${bodyBottom} Z`}
+      stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH}
     />
   );
 
-  // Neckline
-  if (neckline === "V-neck") {
+  // Turtleneck collar tube (drawn above body)
+  if (collarPath) {
+    paths.push(<path key="collar" d={collarPath} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />);
+  }
+
+  // --- CONSTRUCTION SEAM INDICATORS (sweater only) ---
+  if (eff === "full") {
+    const yokeY = bodyTop + 58;
+    if (construction === "Raglan") {
+      // Diagonal dashed seams from each neck edge down to underarm
+      paths.push(
+        <line key="rag-l" x1={neckLeft} y1={bodyTop} x2={x0} y2={yokeY}
+          stroke={STROKE} strokeWidth={STROKE_WIDTH} strokeDasharray="4 3" />,
+        <line key="rag-r" x1={neckRight} y1={bodyTop} x2={x1} y2={yokeY}
+          stroke={STROKE} strokeWidth={STROKE_WIDTH} strokeDasharray="4 3" />
+      );
+    } else if (construction === "Circular yoke") {
+      // Curved dashed yoke line
+      paths.push(
+        <path key="yoke"
+          d={`M ${x0} ${yokeY} Q ${cx} ${yokeY - 18} ${x1} ${yokeY}`}
+          fill="none" stroke={STROKE} strokeWidth={STROKE_WIDTH} strokeDasharray="4 3" />
+      );
+    }
+    // Dropped shoulder: straight horizontal shoulder is already implied by the body rectangle
+  }
+
+  // --- HEM ---
+  if (hem === "Ribbed") {
+    for (let i = 1; i <= 3; i++) {
+      paths.push(
+        <line key={`h${i}`} x1={x0} y1={bodyBottom + i * 5} x2={x1} y2={bodyBottom + i * 5}
+          stroke={STROKE} strokeWidth={STROKE_WIDTH} />
+      );
+    }
+  } else if (hem === "Rolled" || hem === "Curved") {
     paths.push(
-      <path key="neck" d={`M ${cx - 22} ${bodyTop} L ${cx} ${bodyTop + 22} L ${cx + 22} ${bodyTop}`} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />
-    );
-  } else if (neckline === "Turtleneck") {
-    paths.push(
-      <path key="neck" d={`M ${cx - 16} ${bodyTop} L ${cx - 16} ${bodyTop - 22} Q ${cx} ${bodyTop - 27} ${cx + 16} ${bodyTop - 22} L ${cx + 16} ${bodyTop}`} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />
-    );
-  } else if (neckline === "Boat neck") {
-    paths.push(
-      <path key="neck" d={`M ${cx - 34} ${bodyTop} Q ${cx} ${bodyTop + 8} ${cx + 34} ${bodyTop}`} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />
-    );
-  } else if (neckline === "Scoop neck") {
-    paths.push(
-      <path key="neck" d={`M ${cx - 26} ${bodyTop} Q ${cx} ${bodyTop + 18} ${cx + 26} ${bodyTop}`} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />
-    );
-  } else if (neckline === "Square neck") {
-    paths.push(
-      <path key="neck" d={`M ${cx - 20} ${bodyTop} L ${cx - 20} ${bodyTop + 16} L ${cx + 20} ${bodyTop + 16} L ${cx + 20} ${bodyTop}`} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />
-    );
-  } else {
-    // Crew neck default
-    paths.push(
-      <path key="neck" d={`M ${cx - 18} ${bodyTop} Q ${cx} ${bodyTop + 10} ${cx + 18} ${bodyTop}`} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />
+      <path key="hem"
+        d={`M ${x0} ${bodyBottom} Q ${cx} ${bodyBottom + 12} ${x1} ${bodyBottom}`}
+        fill="none" stroke={STROKE} strokeWidth={STROKE_WIDTH} />
     );
   }
 
-  // Hem treatment
-  if (hem === "Ribbed") {
-    paths.push(
-      <line key="h1" x1={x0} y1={bodyBottom + 5} x2={x1} y2={bodyBottom + 5} stroke={STROKE} strokeWidth={STROKE_WIDTH} />,
-      <line key="h2" x1={x0} y1={bodyBottom + 10} x2={x1} y2={bodyBottom + 10} stroke={STROKE} strokeWidth={STROKE_WIDTH} />,
-      <line key="h3" x1={x0} y1={bodyBottom + 15} x2={x1} y2={bodyBottom + 15} stroke={STROKE} strokeWidth={STROKE_WIDTH} />
-    );
-  } else if (hem === "Rolled") {
-    paths.push(
-      <path key="hem" d={`M ${x0} ${bodyBottom} Q ${cx} ${bodyBottom + 10} ${x1} ${bodyBottom}`} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />
-    );
-  } else if (hem === "Curved") {
-    paths.push(
-      <path key="hem" d={`M ${x0} ${bodyBottom} Q ${cx} ${bodyBottom + 12} ${x1} ${bodyBottom}`} stroke={STROKE} fill="none" strokeWidth={STROKE_WIDTH} />
-    );
+  // --- CUFF RIBBING ---
+  if ((eff === "full" || eff === "short") && cuff === "Ribbed") {
+    for (let i = 1; i <= 3; i++) {
+      paths.push(
+        <line key={`lcuff${i}`} x1={x0 - wristW} y1={sleeveEndY + i * 4} x2={x0} y2={sleeveEndY + i * 4}
+          stroke={STROKE} strokeWidth={STROKE_WIDTH} />,
+        <line key={`rcuff${i}`} x1={x1} y1={sleeveEndY + i * 4} x2={x1 + wristW} y2={sleeveEndY + i * 4}
+          stroke={STROKE} strokeWidth={STROKE_WIDTH} />
+      );
+    }
   }
 
   return <>{paths}</>;

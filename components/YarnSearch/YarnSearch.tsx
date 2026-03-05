@@ -15,7 +15,7 @@ interface YarnResult {
   needleSize: number | null;
 }
 
-const WEIGHT_OPTIONS = ["lace", "fingering", "DK", "worsted", "bulky"];
+const WEIGHT_OPTIONS = ["Lace", "Fingering", "Sport", "DK", "Worsted", "Aran", "Bulky", "Super Bulky"];
 
 type FormValues = {
   weight: string;
