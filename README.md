@@ -24,46 +24,27 @@ Malina is a 4-step web app that generates custom, print-ready knitting patterns.
 
 ---
 
-## Setup
-
-**1. Clone the repo**
+## How to Run
 
 ```bash
+# 1. Clone the repo
 git clone https://github.com/liliyaminibaeva/Malina-Hackathon-.git
 cd Malina-Hackathon-/git_repo
-```
 
-**2. Install dependencies**
-
-```bash
+# 2. Install dependencies
 npm install
-```
 
-**3. Configure environment variables**
-
-Create a `.env.local` file in the `git_repo/` directory:
-
-```bash
+# 3. Set up environment variables
 cp .env.example .env.local
-```
+# Fill in ANTHROPIC_API_KEY, RAVELRY_USERNAME, RAVELRY_PASSWORD
 
-Then fill in the values:
-
-```env
-ANTHROPIC_API_KEY=sk-ant-...
-RAVELRY_USERNAME=your-ravelry-username
-RAVELRY_PASSWORD=your-ravelry-password
-```
-
-> Never commit `.env.local`.
-
-**4. Start the development server**
-
-```bash
+# 4. Start the dev server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000)
+
+> Never commit `.env.local`.
 
 ---
 
