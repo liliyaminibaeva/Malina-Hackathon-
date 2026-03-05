@@ -331,7 +331,7 @@ function getSweaterPrompt(styleConfig: StyleConfig, yarnConfig: YarnConfig): str
     const sleeveArea = sleeveLength !== "Sleeveless"
       ? 2 * ((UPPER_ARM_CM[i] + WRIST_CM[i]) / 2) * sleeveCm[i]
       : 0;
-    const densityFactor = Math.max(0.5, (g / 10) * 0.8);
+    const densityFactor = 1.5 / g;
     return Math.ceil(((bodyArea + sleeveArea) * densityFactor) / 50) * 50;
   });
 
