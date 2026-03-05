@@ -1,82 +1,134 @@
 # Malina — Knitting Pattern Generator
 
-A 4-step web app that generates custom knitting patterns. Users pick an item type, configure style options (manually or via photo upload), specify their yarn, and receive a generated pattern they can print or save as a PDF.
+Malina is a 4-step web app that generates custom, print-ready knitting patterns. Pick a garment, configure the style (manually or by uploading a photo), choose your yarn, and get a full pattern you can print or save as a PDF.
 
-## Application Flow
+---
 
-1. `/` — Pick an item type (sweater, slipover, t-shirt, beanie, gloves, scarf, mittens, hood)
-2. `/configure` — Configure style options via manual toggle-button form or photo upload
-3. `/yarn` — Search for yarn by name or enter weight, gauge, and needle size manually
-4. `/generate` — Enter email, generate the pattern, preview and print/save as PDF
+## Features
+
+- **8 item types** — sweater, slipover, t-shirt, beanie, gloves, scarf, mittens, hood
+- **Live SVG preview** — parametric garment schematic updates as you configure options
+- **Photo recognition** — upload a photo of a sweater to auto-fill construction, neckline, fit, sleeve length, hem and cuff
+- **Yarn search** — search Ravelry's yarn database or enter gauge details manually
+- **Pattern generation** — Claude generates a full, size-graded knitting pattern in PetiteKnit style
+- **Size highlighting** — your chosen size is bolded throughout the pattern
+- **Print / PDF** — one-click print layout
+
+---
 
 ## Prerequisites
 
-- An [Anthropic](https://console.anthropic.com/) account with an API key
+- **Node.js** 18 or later
+- An [Anthropic](https://console.anthropic.com/) API key
 - A [Ravelry](https://www.ravelry.com/api) account with API credentials
 
-## Environment Variables
+---
 
-Copy `.env.example` to `.env.local` and fill in the values:
+## Setup
 
-| Variable | Description |
-|---|---|
-| `ANTHROPIC_API_KEY` | Anthropic API key for Claude vision and pattern generation |
-| `RAVELRY_USERNAME` | Ravelry API username (Basic Auth) |
-| `RAVELRY_PASSWORD` | Ravelry API password (Basic Auth) |
+**1. Clone the repo**
 
-Never commit `.env.local`.
+```bash
+git clone https://github.com/liliyaminibaeva/Malina-Hackathon-.git
+cd Malina-Hackathon-/git_repo
+```
 
-## API Reference
+**2. Install dependencies**
 
-### POST /api/analyze-photo
+```bash
+npm install
+```
 
-Accepts `multipart/form-data` with an `image` field (JPEG, PNG, GIF, or WebP; max 10 MB).
+**3. Configure environment variables**
 
-Returns `{ fields: { construction, neckline, sleeveLength, fit, hem } }`.
+Create a `.env.local` file in the `git_repo/` directory:
 
-Errors: 400 if no image or invalid file type; 500 on Claude error.
+```bash
+cp .env.example .env.local
+```
 
-### GET /api/search-yarn
+Then fill in the values:
 
-Accepts `?q=<query>` parameter.
+```env
+ANTHROPIC_API_KEY=sk-ant-...
+RAVELRY_USERNAME=your-ravelry-username
+RAVELRY_PASSWORD=your-ravelry-password
+```
 
-Returns `{ yarns: [{ id, name, brand, weight, gauge, needleSize }] }` (up to 10 results from Ravelry).
+> Never commit `.env.local`.
 
-Errors: 400 if `q` is missing or empty; 500 if Ravelry credentials are invalid or the request fails.
-
-### POST /api/generate-pattern
-
-Accepts `{ itemType: string, styleConfig: object, yarnConfig: { weight: string } }` JSON body.
-
-Returns `{ pattern: string }` — full generated knitting pattern text.
-
-Errors: 400 if `itemType` or `yarnConfig.weight` is missing; 500 on Claude error.
-
-## Getting Started
+**4. Start the development server**
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
 
 ## Build & Lint
 
 ```bash
-npm run build   # TypeScript compile + Next.js build
+npm run build   # TypeScript compile + Next.js production build
 npm run lint    # ESLint
 ```
 
-## API Routes (required by backend — Dev 2)
+---
+
+## App Flow
+
+| Step | Route | Description |
+|------|-------|-------------|
+| 1 | `/` | Pick an item type |
+| 2 | `/configure` | Set style options — or upload a photo to auto-fill them |
+| 3 | `/yarn` | Search Ravelry or enter yarn details manually |
+| 4 | `/generate` | Generate, preview, and print the pattern |
+
+State is held in-memory and resets on full page reload.
+
+---
+
+## API Routes
 
 | Method | Path | Purpose |
 |--------|------|---------|
-| POST | /api/analyze-photo | Accepts multipart image, returns StyleConfig JSON |
-| GET | /api/search-yarn | Accepts ?q= query, returns array of yarn results |
-| POST | /api/generate-pattern | Accepts full config object, returns pattern text/sections |
+| `POST` | `/api/analyze-photo` | Accepts a multipart image; returns detected style fields |
+| `GET` | `/api/search-yarn` | Accepts `?q=` query; returns yarn results from Ravelry |
+| `POST` | `/api/generate-pattern` | Accepts full config; returns generated pattern text |
 
-## Notes
+### POST /api/analyze-photo
 
-- Photo upload accepts JPEG and PNG images up to 10 MB
-- The "Bottoms" category (socks, pants, shorts) is displayed but not yet supported
-- Cross-step state is held in a React context and resets on full page reload
+- **Body:** `multipart/form-data` with an `image` field (JPEG, PNG, GIF, or WebP; max 10 MB)
+- **Returns:** `{ fields: { construction, neckline, sleeveLength, fit, hem, cuff } }` — only keys Claude can confidently identify are included
+- **Errors:** `400` for missing/invalid image; `500` on Claude error
+
+### GET /api/search-yarn
+
+- **Query:** `?q=<search term>`
+- **Returns:** array of yarn results `{ id, name, brand, weight, gauge, needleSize }`
+- **Errors:** `400` if `q` is missing; `500` if Ravelry credentials are invalid
+
+### POST /api/generate-pattern
+
+- **Body:** `{ itemType, styleConfig, yarnConfig }` JSON
+- **Returns:** `{ pattern: string }` — full knitting pattern text
+- **Errors:** `400` if required fields are missing; `500` on Claude error
+
+---
+
+## Stack
+
+- [Next.js](https://nextjs.org/) 15 — App Router, Turbopack
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/) v4
+- [react-hook-form](https://react-hook-form.com/)
+- [Anthropic Claude](https://www.anthropic.com/) — photo analysis + pattern generation
+- [Ravelry API](https://www.ravelry.com/api) — yarn search
+
+---
+
+## Known Limitations
+
+- State resets on full page reload (no persistence)
+- The "Bottoms" category is displayed but not yet supported
