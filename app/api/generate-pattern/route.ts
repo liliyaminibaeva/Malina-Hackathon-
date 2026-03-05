@@ -35,6 +35,14 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const VALID_ITEM_TYPES = ["sweater", "slipover", "t-shirt", "beanie", "gloves", "scarf", "mittens", "hood"];
+  if (!VALID_ITEM_TYPES.includes(itemType)) {
+    return NextResponse.json(
+      { error: "Invalid itemType" },
+      { status: 400 }
+    );
+  }
+
   if (!yarnConfig || typeof yarnConfig !== "object" || Array.isArray(yarnConfig)) {
     return NextResponse.json(
       { error: "Missing required field: yarnConfig" },
@@ -95,6 +103,22 @@ export async function POST(request: NextRequest) {
       { error: "yarnConfig is too large" },
       { status: 400 }
     );
+  }
+
+  const yarnConfigRecord = yarnConfig as Record<string, unknown>;
+  for (const field of ["name", "brand"] as const) {
+    const val = yarnConfigRecord[field];
+    if (val !== undefined) {
+      if (typeof val !== "string") {
+        return NextResponse.json({ error: `yarnConfig.${field} must be a string` }, { status: 400 });
+      }
+      if (val.length > 100) {
+        return NextResponse.json({ error: `yarnConfig.${field} must be 100 characters or fewer` }, { status: 400 });
+      }
+      if (/[\n\r]/.test(val)) {
+        return NextResponse.json({ error: `yarnConfig.${field} must not contain newlines` }, { status: 400 });
+      }
+    }
   }
 
   try {

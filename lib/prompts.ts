@@ -103,7 +103,7 @@ export const PHOTO_ANALYSIS_PROMPT = `Analyze the knitting photo and identify th
 
 Attributes to detect (use exact values listed):
 
-neckline: "Crew neck" | "V-neck" | "Turtleneck" | "Boat neck" | "Scoop neck"
+neckline: "Crew neck" | "V-neck" | "Turtleneck" | "Boat neck"
 sleeveLength: "Long" | "3/4" | "Short" | "Sleeveless"
 fit: "Fitted" | "Classic" | "Relaxed" | "Oversized"
 hem: "Ribbed" | "Rolled" | "Straight"
@@ -314,7 +314,7 @@ function getSweaterPrompt(styleConfig: StyleConfig, yarnConfig: YarnConfig): str
   const sleeveDecRnds = upperArmSts.map((ua, i) => Math.max(Math.floor((ua - wristSts[i]) / 2), 0));
   const sleeveDecEvery = sleeveRows.map((rows, i) => {
     if (sleeveDecRnds[i] === 0 || rows === 0) return 0;
-    return Math.floor(rows / (sleeveDecRnds[i] + 1));
+    return Math.max(1, Math.floor(rows / (sleeveDecRnds[i] + 1)));
   });
 
   const raglanFrontBack = neckSts.map((ns, i) =>
@@ -322,7 +322,7 @@ function getSweaterPrompt(styleConfig: StyleConfig, yarnConfig: YarnConfig): str
   );
   const raglanIncRnds = bodyStitches.map((bs, i) => {
     const start = raglanFrontBack[i] * 2 + RAGLAN_START_SLEEVE[i] * 2;
-    return Math.ceil((bs - start) / 8);
+    return Math.max(0, Math.ceil((bs - start) / 8));
   });
 
   // Rough yarn estimate
