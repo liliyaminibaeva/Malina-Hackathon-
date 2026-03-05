@@ -16,7 +16,7 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
     {
       name: "construction",
       label: "Construction",
-      options: ["Raglan", "Circular yoke", "Dropped shoulder"],
+      options: ["Raglan", "Dropped shoulder"],
     },
     {
       name: "fit",
@@ -36,12 +36,12 @@ export const ITEM_FIELDS: Record<Exclude<ItemType, null>, FieldDefinition[]> = {
     {
       name: "cuff",
       label: "Cuff",
-      options: ["Ribbed", "Rolled", "Straight"],
+      options: ["Ribbed", "Straight"],
     },
     {
       name: "hem",
       label: "Hem",
-      options: ["Ribbed", "Rolled", "Straight"],
+      options: ["Ribbed", "Straight"],
     },
   ],
   slipover: [
