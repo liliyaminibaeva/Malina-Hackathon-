@@ -69,7 +69,8 @@ export default function ConfigForm({ defaultValues, onValuesChange }: ConfigForm
       onValuesChange?.(newValues as StyleConfig);
     });
     return unsubscribe;
-  }, [watch, onValuesChange, getValues]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function onSubmit(data: StyleConfig) {
     const filtered = Object.fromEntries(

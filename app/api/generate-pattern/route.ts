@@ -83,9 +83,9 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    if (/[\n\r]/.test(v)) {
+    if (/[\n\r]/.test(k) || /[\n\r]/.test(v)) {
       return NextResponse.json(
-        { error: "styleConfig values must not contain newlines" },
+        { error: "styleConfig fields must not contain newlines" },
         { status: 400 }
       );
     }
@@ -117,6 +117,27 @@ export async function POST(request: NextRequest) {
       }
       if (/[\n\r]/.test(val)) {
         return NextResponse.json({ error: `yarnConfig.${field} must not contain newlines` }, { status: 400 });
+      }
+    }
+  }
+
+  const VALID_YARN_WEIGHTS = ["Lace", "Fingering", "Sport", "DK", "Worsted", "Aran", "Bulky", "Super Bulky"];
+  const weightVal = yarnConfigRecord.weight as string;
+  if (!VALID_YARN_WEIGHTS.includes(weightVal)) {
+    return NextResponse.json({ error: "Invalid yarnConfig.weight value" }, { status: 400 });
+  }
+
+  for (const field of ["gaugeStitches", "gaugeRows", "needleSize"] as const) {
+    const val = yarnConfigRecord[field];
+    if (val !== undefined) {
+      if (typeof val !== "string") {
+        return NextResponse.json({ error: `yarnConfig.${field} must be a string` }, { status: 400 });
+      }
+      if (val.length > 20) {
+        return NextResponse.json({ error: `yarnConfig.${field} must be 20 characters or fewer` }, { status: 400 });
+      }
+      if (!/^\d+(\.\d+)?$/.test(val)) {
+        return NextResponse.json({ error: `yarnConfig.${field} must be a positive number` }, { status: 400 });
       }
     }
   }
